@@ -41,9 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     $('st-goto-screen')?.addEventListener('click', () => { $('screen-settings-page')?.classList.add('open'); });
     $('st-goto-wallpaper')?.addEventListener('click', () => { $('wallpaper-settings-page')?.classList.add('open'); });
     $('st-goto-font')?.addEventListener('click', () => { $('font-settings-page')?.classList.add('open'); });
-    ['st-goto-appicon', 'st-goto-data'].forEach(id => {
-        $(id)?.addEventListener('click', () => toast('该模块开发中 ·˖✧'));
-    });
+    $('st-goto-appicon')?.addEventListener('click', () => { $('appicon-settings-page')?.classList.add('open'); });
+    $('st-goto-data')?.addEventListener('click', () => toast('该模块开发中 ·˖✧'));
 
     /* ════════════════════════════════════════
        2. 子页返回
@@ -995,5 +994,349 @@ document.addEventListener('DOMContentLoaded', () => {
         const cfg = getWpCfg();
         restoreWeatherChip(cfg.weather || 'none');
     });
+
+    /* ════════════════════════════════════════
+   10. 应用图标更换
+   ════════════════════════════════════════ */
+
+    /* 返回 */
+    $('appicon-back')?.addEventListener('click', () => {
+        $('appicon-settings-page')?.classList.remove('open');
+    });
+
+    /* 页面打开时同步预览图标的当前样式 */
+    $('st-goto-appicon')?.addEventListener('click', () => {
+        restoreAppiconPage();
+    });
+
+    /* ── 9 个 APP 的配置表 ── */
+    const APP_IDS = ['renmai', 'weibo', 'bubble', 'douban', 'music', 'daworld', 'profile', 'social', 'settings'];
+
+    /* IndexedDB：图标图片存储（复用壁纸 DB，加 objectStore） */
+    const CI_DB_NAME = 'sim_ci_db';
+    let ciDB = null;
+
+    function openCiDB() {
+        return new Promise((resolve, reject) => {
+            if (ciDB) { resolve(ciDB); return; }
+            const req = indexedDB.open(CI_DB_NAME, 1);
+            req.onupgradeneeded = e => {
+                e.target.result.createObjectStore('icons', { keyPath: 'key' });
+            };
+            req.onsuccess = e => { ciDB = e.target.result; resolve(ciDB); };
+            req.onerror = e => reject(e);
+        });
+    }
+
+    async function saveCiBlob(appId, blob) {
+        const db = await openCiDB();
+        return new Promise((res, rej) => {
+            const tx = db.transaction('icons', 'readwrite');
+            tx.objectStore('icons').put({ key: appId, blob });
+            tx.oncomplete = res; tx.onerror = rej;
+        });
+    }
+
+    async function loadCiBlob(appId) {
+        const db = await openCiDB();
+        return new Promise((res, rej) => {
+            const tx = db.transaction('icons', 'readonly');
+            const req = tx.objectStore('icons').get(appId);
+            req.onsuccess = e => res(e.target.result?.blob || null);
+            req.onerror = rej;
+        });
+    }
+
+    async function clearCiBlob(appId) {
+        const db = await openCiDB();
+        return new Promise((res, rej) => {
+            const tx = db.transaction('icons', 'readwrite');
+            tx.objectStore('icons').delete(appId);
+            tx.oncomplete = res; tx.onerror = rej;
+        });
+    }
+
+    /* 当前各图标 ObjectURL，避免内存泄漏 */
+    const ciUrls = {};
+
+    /* 将自定义图片应用到主屏幕真实图标 */
+    function applyCiImage(appId, url) {
+        /* 主屏 app-icon */
+        document.querySelectorAll(`.app-icon.${appId}`).forEach(el => {
+            if (url) {
+                el.style.backgroundImage = `url(${url})`;
+                el.style.backgroundSize = 'cover';
+                el.style.backgroundPosition = 'center';
+                /* 隐藏 SVG，保留 background-image */
+                el.querySelectorAll('svg').forEach(s => s.style.opacity = '0');
+            } else {
+                el.style.backgroundImage = '';
+                el.style.backgroundSize = '';
+                el.style.backgroundPosition = '';
+                el.querySelectorAll('svg').forEach(s => s.style.opacity = '');
+            }
+        });
+        /* 设置页预览 */
+        const prev = $(`ci-preview-${appId}`);
+        if (prev) {
+            if (url) {
+                prev.style.backgroundImage = `url(${url})`;
+                prev.style.backgroundSize = 'cover';
+                prev.style.backgroundPosition = 'center';
+                prev.querySelectorAll('svg').forEach(s => s.style.opacity = '0');
+            } else {
+                prev.style.backgroundImage = '';
+                prev.style.backgroundSize = '';
+                prev.style.backgroundPosition = '';
+                prev.querySelectorAll('svg').forEach(s => s.style.opacity = '');
+            }
+        }
+    }
+
+    /* 绑定换图 input */
+    APP_IDS.forEach(appId => {
+        const inp = $(`ci-file-${appId}`);
+        if (!inp) return;
+        inp.addEventListener('change', async e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (ciUrls[appId]) { URL.revokeObjectURL(ciUrls[appId]); delete ciUrls[appId]; }
+            await saveCiBlob(appId, file);
+            ciUrls[appId] = URL.createObjectURL(file);
+            applyCiImage(appId, ciUrls[appId]);
+            toast(`${appId} 图标已更换`, 'ok');
+            e.target.value = '';
+        });
+    });
+
+    /* 绑定重置按钮 */
+    document.querySelectorAll('.ci-btn-reset').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const appId = btn.dataset.reset;
+            if (!appId) return;
+            await clearCiBlob(appId);
+            if (ciUrls[appId]) { URL.revokeObjectURL(ciUrls[appId]); delete ciUrls[appId]; }
+            applyCiImage(appId, null);
+            toast('已重置为默认图标');
+        });
+    });
+
+    /* 页面加载时恢复所有自定义图标 */
+    (async () => {
+        for (const appId of APP_IDS) {
+            try {
+                const blob = await loadCiBlob(appId);
+                if (blob) {
+                    ciUrls[appId] = URL.createObjectURL(blob);
+                    applyCiImage(appId, ciUrls[appId]);
+                }
+            } catch (e) { /* 跳过 */ }
+        }
+    })();
+
+    /* ── 图标风格预设 ── */
+    const ICON_STYLES = {
+        default: {
+            background: '',
+            backdropFilter: '',
+            border: '',
+            boxShadow: '',
+            svgStroke: '',
+            borderRadius: '14px',
+        },
+        glass: {
+            background: 'rgba(255,255,255,0.28)',
+            backdropFilter: 'blur(14px)',
+            border: '1px solid rgba(255,255,255,0.55)',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)',
+            svgStroke: 'rgba(80,75,70,0.85)',
+            borderRadius: '16px',
+        },
+        clear: {
+            background: 'rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(6px)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            boxShadow: 'none',
+            svgStroke: 'rgba(255,255,255,0.9)',
+            borderRadius: '14px',
+        },
+        ins: {
+            background: 'linear-gradient(135deg,rgba(253,245,240,0.9),rgba(245,238,232,0.9))',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(220,210,200,0.5)',
+            boxShadow: '0 2px 10px rgba(180,160,140,0.15)',
+            svgStroke: '#9a7a6a',
+            borderRadius: '18px',
+        },
+        korean: {
+            background: 'linear-gradient(135deg,rgba(248,244,255,0.9),rgba(240,235,255,0.9))',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(200,190,230,0.45)',
+            boxShadow: '0 2px 12px rgba(160,140,200,0.15)',
+            svgStroke: '#8a78b8',
+            borderRadius: '20px',
+        },
+        ios: {
+            background: 'linear-gradient(145deg,rgba(255,255,255,0.95),rgba(242,242,247,0.95))',
+            backdropFilter: '',
+            border: 'none',
+            boxShadow: '0 3px 14px rgba(0,0,0,0.12)',
+            svgStroke: '#3c3c44',
+            borderRadius: '22px',
+        },
+        dark: {
+            background: 'rgba(28,26,24,0.88)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(80,75,70,0.5)',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.35)',
+            svgStroke: 'rgba(220,215,210,0.9)',
+            borderRadius: '14px',
+        },
+        cream: {
+            background: 'linear-gradient(135deg,rgba(255,252,245,0.95),rgba(248,244,236,0.95))',
+            backdropFilter: '',
+            border: '1px solid rgba(230,220,200,0.6)',
+            boxShadow: '0 2px 8px rgba(200,185,160,0.2)',
+            svgStroke: '#b09060',
+            borderRadius: '16px',
+        },
+        neon: {
+            background: 'rgba(10,8,20,0.85)',
+            backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(120,100,220,0.6)',
+            boxShadow: '0 0 12px rgba(120,100,220,0.35), inset 0 0 8px rgba(100,80,200,0.1)',
+            svgStroke: '#c0b0ff',
+            borderRadius: '14px',
+        },
+    };
+
+    function applyIconStyle(styleId) {
+        const s = ICON_STYLES[styleId] || ICON_STYLES.default;
+        document.querySelectorAll('.app-icon').forEach(el => {
+            /* 如果有自定义图片则不覆盖 background（backgroundImage 已设置） */
+            const hasCustImg = el.style.backgroundImage && el.style.backgroundImage !== 'none';
+            if (!hasCustImg) {
+                el.style.background = s.background;
+            }
+            el.style.backdropFilter = s.backdropFilter;
+            el.style.webkitBackdropFilter = s.backdropFilter;
+            el.style.border = s.border;
+            el.style.boxShadow = s.boxShadow;
+            el.style.borderRadius = s.borderRadius;
+            if (s.svgStroke) {
+                el.querySelectorAll('svg').forEach(svg => {
+                    svg.style.stroke = s.svgStroke;
+                });
+            } else {
+                el.querySelectorAll('svg').forEach(svg => {
+                    svg.style.stroke = '';
+                });
+            }
+        });
+        /* 同步预览区 */
+        document.querySelectorAll('.ci-preview').forEach(el => {
+            const hasCustImg = el.style.backgroundImage && el.style.backgroundImage !== 'none';
+            if (!hasCustImg) el.style.background = s.background;
+            el.style.backdropFilter = s.backdropFilter;
+            el.style.webkitBackdropFilter = s.backdropFilter;
+            el.style.border = s.border;
+            el.style.boxShadow = s.boxShadow;
+            el.style.borderRadius = s.borderRadius;
+            if (s.svgStroke) {
+                el.querySelectorAll('svg').forEach(svg => svg.style.stroke = s.svgStroke);
+            } else {
+                el.querySelectorAll('svg').forEach(svg => svg.style.stroke = '');
+            }
+        });
+        /* 同步演示图标 */
+        const demo = document.querySelector('.ilc-demo-icon');
+        if (demo) {
+            if (!demo.style.backgroundImage) demo.style.background = s.background;
+            demo.style.backdropFilter = s.backdropFilter;
+            demo.style.webkitBackdropFilter = s.backdropFilter;
+            demo.style.border = s.border;
+            demo.style.boxShadow = s.boxShadow;
+            demo.style.borderRadius = s.borderRadius;
+        }
+    }
+
+    function getIconCfg() { return JSON.parse(localStorage.getItem('sim_icon_cfg') || '{}'); }
+
+    /* 图标风格芯片点击 */
+    document.querySelectorAll('.icon-style-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('.icon-style-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            applyIconStyle(chip.dataset.style);
+        });
+    });
+
+    /* ── 图标文字颜色 ── */
+    function applyLabelColor(color) {
+        document.querySelectorAll('.app-label').forEach(el => {
+            el.style.color = color;
+        });
+        /* 演示 */
+        const demo = $('ilc-demo-label');
+        if (demo) demo.style.color = color;
+    }
+
+    /* 颜色色块点击 */
+    document.querySelectorAll('.ilc-swatch:not(.ilc-custom)').forEach(sw => {
+        sw.addEventListener('click', () => {
+            document.querySelectorAll('.ilc-swatch').forEach(s => s.classList.remove('active'));
+            sw.classList.add('active');
+            applyLabelColor(sw.dataset.color);
+            /* 同步自定义颜色 picker */
+            const picker = $('ilc-color-picker');
+            if (picker) picker.value = sw.dataset.color;
+        });
+    });
+
+    /* 自定义颜色 picker */
+    $('ilc-color-picker')?.addEventListener('input', e => {
+        const color = e.target.value;
+        document.querySelectorAll('.ilc-swatch').forEach(s => s.classList.remove('active'));
+        $('ilc-custom-swatch')?.classList.add('active');
+        applyLabelColor(color);
+    });
+
+    /* 保存图标设置 */
+    $('appicon-save-btn')?.addEventListener('click', () => {
+        const activeStyleChip = document.querySelector('.icon-style-chip.active');
+        const styleId = activeStyleChip?.dataset.style || 'default';
+        const labelColor = document.querySelector('.app-label')?.style.color
+            || $('ilc-color-picker')?.value || '#4a4540';
+        const cfg = { styleId, labelColor };
+        localStorage.setItem('sim_icon_cfg', JSON.stringify(cfg));
+        toast('图标设置已保存 ✓', 'ok');
+    });
+
+    /* 恢复图标设置页状态 */
+    function restoreAppiconPage() {
+        const cfg = getIconCfg();
+        const styleId = cfg.styleId || 'default';
+        document.querySelectorAll('.icon-style-chip').forEach(c => {
+            c.classList.toggle('active', c.dataset.style === styleId);
+        });
+        const labelColor = cfg.labelColor || '#4a4540';
+        const picker = $('ilc-color-picker');
+        if (picker) picker.value = labelColor;
+        /* 高亮预设色块 */
+        let matched = false;
+        document.querySelectorAll('.ilc-swatch:not(.ilc-custom)').forEach(sw => {
+            if (sw.dataset.color === labelColor) { sw.classList.add('active'); matched = true; }
+            else sw.classList.remove('active');
+        });
+        if (!matched) $('ilc-custom-swatch')?.classList.add('active');
+        else $('ilc-custom-swatch')?.classList.remove('active');
+    }
+
+    /* 页面加载恢复图标设置 */
+    (() => {
+        const cfg = getIconCfg();
+        if (cfg.styleId) applyIconStyle(cfg.styleId);
+        if (cfg.labelColor) applyLabelColor(cfg.labelColor);
+    })();
 
 });

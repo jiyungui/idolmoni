@@ -1478,3 +1478,387 @@ input[type="range"].st-slider::-webkit-slider-thumb {
     color: var(--text-muted);
     letter-spacing: 0.5px;
 }
+
+/* ════════════════════════════════════════
+   应用图标更换子页
+   ════════════════════════════════════════ */
+
+/* ── 图标风格网格 ── */
+.icon-style-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 14px 14px 10px;
+}
+
+.icon-style-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    padding: 10px 6px 8px;
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+    transition: background 0.15s, border-color 0.15s, transform 0.12s;
+}
+
+.icon-style-chip:active {
+    transform: scale(0.92);
+}
+
+.icon-style-chip.active {
+    background: rgba(232, 228, 222, 0.7);
+    border-color: rgba(190, 185, 176, 0.6);
+}
+
+.icon-style-preview {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 各风格的预览图标 */
+.isp-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.isp-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
+}
+
+/* 原生 */
+.isp-default {
+    background: linear-gradient(135deg, #eae8e4, #dedad4);
+    border: 1px solid rgba(210, 205, 198, 0.5);
+}
+
+.isp-default svg {
+    stroke: rgba(110, 105, 98, 0.8);
+}
+
+/* 毛玻璃 */
+.isp-glass {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.isp-glass svg {
+    stroke: rgba(80, 75, 70, 0.85);
+}
+
+/* 透明 */
+.isp-clear {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: none;
+    /* 让透明感更明显，背景用页面色 */
+    outline: 1px solid rgba(180, 175, 168, 0.2);
+}
+
+.isp-clear svg {
+    stroke: rgba(90, 85, 80, 0.7);
+}
+
+/* ins 风 */
+.isp-ins {
+    background: linear-gradient(135deg, #fdf5f0, #f5ece8);
+    border: 1px solid rgba(220, 210, 200, 0.5);
+    box-shadow: 0 2px 8px rgba(180, 160, 140, 0.12);
+}
+
+.isp-ins svg {
+    stroke: #9a7a6a;
+}
+
+/* 韩系 */
+.isp-korean {
+    background: linear-gradient(135deg, #f8f4ff, #f0ebff);
+    border: 1px solid rgba(200, 190, 230, 0.45);
+    box-shadow: 0 2px 10px rgba(160, 140, 200, 0.12);
+    border-radius: 20px !important;
+}
+
+.isp-korean svg {
+    stroke: #8a78b8;
+}
+
+/* iOS 风 */
+.isp-ios {
+    background: linear-gradient(145deg, #fff, #f2f2f7);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    border-radius: 22px !important;
+}
+
+.isp-ios svg {
+    stroke: #3c3c44;
+}
+
+/* 暗黑 */
+.isp-dark {
+    background: rgba(28, 26, 24, 0.88);
+    border: 1px solid rgba(80, 75, 70, 0.5);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.isp-dark svg {
+    stroke: rgba(220, 215, 210, 0.9);
+}
+
+/* 奶油 */
+.isp-cream {
+    background: linear-gradient(135deg, #fffcf5, #f8f4ec);
+    border: 1px solid rgba(230, 220, 200, 0.6);
+    box-shadow: 0 2px 6px rgba(200, 185, 160, 0.18);
+}
+
+.isp-cream svg {
+    stroke: #b09060;
+}
+
+/* 霓虹 */
+.isp-neon {
+    background: rgba(10, 8, 20, 0.85);
+    border: 1px solid rgba(120, 100, 220, 0.6);
+    box-shadow: 0 0 10px rgba(120, 100, 220, 0.3);
+}
+
+.isp-neon svg {
+    stroke: #c0b0ff;
+}
+
+.icon-style-name {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+}
+
+.icon-style-chip.active .icon-style-name {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* ── 自定义图标列表 ── */
+.custom-icon-list {
+    padding: 8px 0;
+}
+
+.ci-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 16px;
+    position: relative;
+    transition: background 0.15s;
+}
+
+.ci-row+.ci-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 0;
+    height: 0.5px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.ci-preview-wrap {
+    flex-shrink: 0;
+}
+
+/* 复用 app-icon 尺寸，但这里用独立尺寸避免影响主屏 */
+.ci-preview {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-size: cover !important;
+    background-position: center !important;
+    transition: transform 0.12s;
+}
+
+.ci-preview svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+.ci-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ci-name {
+    font-size: 13px;
+    color: var(--text-primary);
+    letter-spacing: 0.1px;
+}
+
+.ci-btns {
+    display: flex;
+    gap: 7px;
+}
+
+.ci-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 9px;
+    background: rgba(245, 244, 241, 0.85);
+    border: 1px solid rgba(205, 200, 193, 0.5);
+    color: var(--text-secondary);
+    font-size: 11.5px;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ci-btn:active {
+    opacity: 0.7;
+    background: rgba(232, 230, 226, 0.95);
+}
+
+.ci-btn-reset {
+    color: rgba(175, 115, 115, 0.85);
+    background: rgba(248, 242, 242, 0.85);
+    border-color: rgba(210, 180, 180, 0.4);
+}
+
+/* ── 图标文字颜色 ── */
+.icon-label-color-section {
+    padding: 12px 16px;
+}
+
+.ilc-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 14px;
+}
+
+.ilc-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ilc-swatch:active {
+    transform: scale(0.88);
+}
+
+.ilc-swatch.active {
+    box-shadow: 0 0 0 2.5px rgba(120, 115, 108, 0.5), 0 0 0 4px rgba(255, 255, 255, 0.9);
+}
+
+/* 自定义色块 */
+.ilc-custom {
+    background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #b57bee, #ff6b6b) !important;
+    border: none !important;
+    overflow: hidden;
+}
+
+.ilc-custom input[type="color"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+}
+
+.ilc-custom svg {
+    width: 13px;
+    height: 13px;
+    stroke: rgba(255, 255, 255, 0.9);
+    fill: none;
+    stroke-width: 1.8;
+    pointer-events: none;
+    position: relative;
+    z-index: 1;
+}
+
+/* 预览行 */
+.ilc-preview-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ilc-preview-label {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+}
+
+.ilc-preview-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.ilc-demo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.ilc-demo-icon {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 12px;
+}
+
+.ilc-demo-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.ilc-demo-label {
+    font-size: 10.5px;
+    letter-spacing: 0.2px;
+    color: #4a4540;
+    transition: color 0.2s;
+}
