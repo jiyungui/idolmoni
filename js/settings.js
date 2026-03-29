@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function escHtml(s) {
-        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     /* ════════════════════════════════════════
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ════════════════════════════════════════ */
     $('st-goto-api')?.addEventListener('click', () => { $('api-settings-page')?.classList.add('open'); });
     $('st-goto-screen')?.addEventListener('click', () => { $('screen-settings-page')?.classList.add('open'); });
-    ['st-goto-wallpaper','st-goto-appicon','st-goto-data'].forEach(id => {
+    ['st-goto-wallpaper', 'st-goto-appicon', 'st-goto-data'].forEach(id => {
         $(id)?.addEventListener('click', () => toast('该模块开发中 ·˖✧'));
     });
 
@@ -60,13 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
     (() => {
         const d = JSON.parse(localStorage.getItem('sim_api_draft') || '{}');
         if (inpName) inpName.value = d.name || '';
-        if (inpUrl)  inpUrl.value  = d.url  || '';
-        if (inpKey)  inpKey.value  = d.key  || '';
+        if (inpUrl) inpUrl.value = d.url || '';
+        if (inpKey) inpKey.value = d.key || '';
     })();
 
     [inpName, inpUrl, inpKey].forEach(el => el?.addEventListener('input', () => {
         localStorage.setItem('sim_api_draft', JSON.stringify({
-            name: inpName?.value||'', url: inpUrl?.value||'', key: inpKey?.value||'',
+            name: inpName?.value || '', url: inpUrl?.value || '', key: inpKey?.value || '',
         }));
     }));
 
@@ -77,62 +77,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $('api-fetch-btn')?.addEventListener('click', async () => {
         const url = inpUrl?.value.trim(), key = inpKey?.value.trim();
-        if (!url) { setStatus('请先填写 API URL','err'); return; }
-        setStatus('拉取中…','info');
+        if (!url) { setStatus('请先填写 API URL', 'err'); return; }
+        setStatus('拉取中…', 'info');
         try {
-            const base = url.replace(/\/$/,'').replace(/\/chat\/completions$/,'');
-            const res = await fetch(`${base}/models`, { headers: key ? {Authorization:`Bearer ${key}`} : {} });
+            const base = url.replace(/\/$/, '').replace(/\/chat\/completions$/, '');
+            const res = await fetch(`${base}/models`, { headers: key ? { Authorization: `Bearer ${key}` } : {} });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
             const list = Array.isArray(data) ? data : Array.isArray(data.data) ? data.data : [];
-            if (!list.length) { setStatus('未获取到模型列表','err'); return; }
+            if (!list.length) { setStatus('未获取到模型列表', 'err'); return; }
             selModel.innerHTML = '';
             list.forEach(m => {
-                const id = typeof m==='string' ? m : (m.id||m.name||m);
+                const id = typeof m === 'string' ? m : (m.id || m.name || m);
                 const opt = document.createElement('option');
                 opt.value = opt.textContent = id;
                 selModel.appendChild(opt);
             });
-            setStatus(`已拉取 ${list.length} 个模型 ✓`,'ok');
-        } catch(e) { setStatus(`拉取失败：${e.message}`,'err'); }
+            setStatus(`已拉取 ${list.length} 个模型 ✓`, 'ok');
+        } catch (e) { setStatus(`拉取失败：${e.message}`, 'err'); }
     });
 
     $('api-test-btn')?.addEventListener('click', async () => {
-        const url=inpUrl?.value.trim(), key=inpKey?.value.trim(), model=selModel?.value;
-        if (!url||!model) { setStatus('请填写 URL 并选择模型','err'); return; }
-        setStatus('测试中…','info');
+        const url = inpUrl?.value.trim(), key = inpKey?.value.trim(), model = selModel?.value;
+        if (!url || !model) { setStatus('请填写 URL 并选择模型', 'err'); return; }
+        setStatus('测试中…', 'info');
         try {
-            const base = url.replace(/\/$/,'');
+            const base = url.replace(/\/$/, '');
             const endpoint = base.endsWith('/chat/completions') ? base : `${base}/chat/completions`;
             const res = await fetch(endpoint, {
-                method:'POST',
-                headers:{'Content-Type':'application/json',...(key?{Authorization:`Bearer ${key}`}:{})},
-                body: JSON.stringify({ model, messages:[{role:'user',content:'hi'}], max_tokens:5 }),
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...(key ? { Authorization: `Bearer ${key}` } : {}) },
+                body: JSON.stringify({ model, messages: [{ role: 'user', content: 'hi' }], max_tokens: 5 }),
             });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            setStatus('测试成功，模型响应正常 ✓','ok');
-        } catch(e) { setStatus(`测试失败：${e.message}`,'err'); }
+            setStatus('测试成功，模型响应正常 ✓', 'ok');
+        } catch (e) { setStatus(`测试失败：${e.message}`, 'err'); }
     });
 
     $('api-save-btn')?.addEventListener('click', () => {
-        const name=inpName?.value.trim(), url=inpUrl?.value.trim(), key=inpKey?.value.trim(), model=selModel?.value;
-        if (!name) { setStatus('请填写 API 名称','err'); return; }
-        if (!url)  { setStatus('请填写 API URL','err'); return; }
-        if (!model){ setStatus('请先拉取并选择模型','err'); return; }
+        const name = inpName?.value.trim(), url = inpUrl?.value.trim(), key = inpKey?.value.trim(), model = selModel?.value;
+        if (!name) { setStatus('请填写 API 名称', 'err'); return; }
+        if (!url) { setStatus('请填写 API URL', 'err'); return; }
+        if (!model) { setStatus('请先拉取并选择模型', 'err'); return; }
         const list = getModelList();
-        if (list.find(m=>m.name===name&&m.model===model)) { setStatus('该配置已存在','err'); return; }
-        list.push({id:Date.now(), name, url, key, model});
+        if (list.find(m => m.name === name && m.model === model)) { setStatus('该配置已存在', 'err'); return; }
+        list.push({ id: Date.now(), name, url, key, model });
         saveModelList(list); renderModelList();
-        setStatus(`已保存：${name} / ${model} ✓`,'ok'); toast(`模型「${model}」已保存`,'ok');
+        setStatus(`已保存：${name} / ${model} ✓`, 'ok'); toast(`模型「${model}」已保存`, 'ok');
     });
 
     /* ════════════════════════════════════════
        4. 模型列表
        ════════════════════════════════════════ */
-    function getModelList()      { return JSON.parse(localStorage.getItem('sim_model_list')||'[]'); }
+    function getModelList() { return JSON.parse(localStorage.getItem('sim_model_list') || '[]'); }
     function saveModelList(list) { localStorage.setItem('sim_model_list', JSON.stringify(list)); }
-    function getActiveId()       { return Number(localStorage.getItem('sim_active_model'))||0; }
-    function setActiveId(id)     { localStorage.setItem('sim_active_model', String(id)); }
+    function getActiveId() { return Number(localStorage.getItem('sim_active_model')) || 0; }
+    function setActiveId(id) { localStorage.setItem('sim_active_model', String(id)); }
 
     function renderModelList() {
         const container = $('model-list-container');
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = '';
         list.forEach(m => {
             const item = document.createElement('div');
-            item.className = `model-item${m.id===activeId?' active':''}`;
+            item.className = `model-item${m.id === activeId ? ' active' : ''}`;
             item.innerHTML = `
                 <div class="model-dot"></div>
                 <div class="model-info">
@@ -157,13 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>`;
             item.addEventListener('click', e => {
                 if (e.target.closest('[data-del]')) return;
-                setActiveId(m.id); renderModelList(); toast(`已切换到 ${m.model}`,'ok');
+                setActiveId(m.id); renderModelList(); toast(`已切换到 ${m.model}`, 'ok');
             });
             item.querySelector('[data-del]').addEventListener('click', e => {
                 e.stopPropagation();
-                const updated = getModelList().filter(x=>x.id!==m.id);
+                const updated = getModelList().filter(x => x.id !== m.id);
                 saveModelList(updated);
-                if (m.id===getActiveId()&&updated.length) setActiveId(updated[0].id);
+                if (m.id === getActiveId() && updated.length) setActiveId(updated[0].id);
                 renderModelList(); toast('已删除');
             });
             container.appendChild(item);
@@ -177,28 +177,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* 语言列表（无emoji） */
     const LANGUAGES = [
-        { code:'zh',         label:'普通话'   },
-        { code:'zh-dialect', label:'方言'     },
-        { code:'en',         label:'English'  },
-        { code:'ja',         label:'日本語'   },
-        { code:'ko',         label:'한국어'   },
-        { code:'fr',         label:'Français' },
-        { code:'de',         label:'Deutsch'  },
-        { code:'es',         label:'Español'  },
-        { code:'ar',         label:'عربي'     },
+        { code: 'zh', label: '普通话' },
+        { code: 'zh-dialect', label: '方言' },
+        { code: 'en', label: 'English' },
+        { code: 'ja', label: '日本語' },
+        { code: 'ko', label: '한국어' },
+        { code: 'fr', label: 'Français' },
+        { code: 'de', label: 'Deutsch' },
+        { code: 'es', label: 'Español' },
+        { code: 'ar', label: 'عربي' },
     ];
 
     function renderLangGrid(activeLang) {
         const grid = $('mm-lang-grid');
         if (!grid) return;
         grid.innerHTML = '';
-        LANGUAGES.forEach(({code, label}) => {
+        LANGUAGES.forEach(({ code, label }) => {
             const tag = document.createElement('div');
-            tag.className = `lang-tag${code===activeLang?' active':''}`;
+            tag.className = `lang-tag${code === activeLang ? ' active' : ''}`;
             tag.dataset.code = code;
             tag.innerHTML = `<span class="lang-name">${label}</span>`;
             tag.addEventListener('click', () => {
-                document.querySelectorAll('#mm-lang-grid .lang-tag').forEach(t=>t.classList.remove('active'));
+                document.querySelectorAll('#mm-lang-grid .lang-tag').forEach(t => t.classList.remove('active'));
                 tag.classList.add('active');
             });
             grid.appendChild(tag);
@@ -210,22 +210,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return active?.dataset.code || 'zh';
     }
 
-    function getMiniMaxCfg() { return JSON.parse(localStorage.getItem('sim_minimax_cfg')||'{}'); }
+    function getMiniMaxCfg() { return JSON.parse(localStorage.getItem('sim_minimax_cfg') || '{}'); }
 
     function restoreMiniMax() {
         const cfg = getMiniMaxCfg();
         if ($('mm-group-id')) $('mm-group-id').value = cfg.groupId || '';
-        if ($('mm-api-key'))  $('mm-api-key').value  = cfg.apiKey  || '';
-        if ($('mm-voice-id')) $('mm-voice-id').value = cfg.voiceId || 'female-tianmei';
+        if ($('mm-api-key')) $('mm-api-key').value = cfg.apiKey || '';
+        if ($('mm-voice-id')) $('mm-voice-id').value = cfg.voiceId || '';
         const sliders = [
-            {id:'mm-speed', def:1.0},
-            {id:'mm-vol',   def:1.0},
-            {id:'mm-pitch', def:0  },
+            { id: 'mm-speed', def: 1.0 },
+            { id: 'mm-vol', def: 1.0 },
+            { id: 'mm-pitch', def: 0 },
         ];
-        sliders.forEach(({id, def}) => {
+        sliders.forEach(({ id, def }) => {
             const inp = $(id);
             if (!inp) return;
-            inp.value = cfg[id.replace('mm-','')] ?? def;
+            inp.value = cfg[id.replace('mm-', '')] ?? def;
             updateSlider(inp);
         });
         updateSliderLabels();
@@ -233,18 +233,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateSlider(input) {
-        const min=parseFloat(input.min), max=parseFloat(input.max), val=parseFloat(input.value);
-        input.style.setProperty('--pct', `${((val-min)/(max-min)*100).toFixed(1)}%`);
+        const min = parseFloat(input.min), max = parseFloat(input.max), val = parseFloat(input.value);
+        input.style.setProperty('--pct', `${((val - min) / (max - min) * 100).toFixed(1)}%`);
     }
 
     function updateSliderLabels() {
-        ['mm-speed','mm-vol','mm-pitch'].forEach(id => {
-            const inp=$(id), disp=$(`${id}-val`);
-            if (inp&&disp) disp.textContent = parseFloat(inp.value).toFixed(1);
+        ['mm-speed', 'mm-vol', 'mm-pitch'].forEach(id => {
+            const inp = $(id), disp = $(`${id}-val`);
+            if (inp && disp) disp.textContent = parseFloat(inp.value).toFixed(1);
         });
     }
 
-    ['mm-speed','mm-vol','mm-pitch'].forEach(id => {
+    ['mm-speed', 'mm-vol', 'mm-pitch'].forEach(id => {
         $(id)?.addEventListener('input', () => { updateSlider($(id)); updateSliderLabels(); });
     });
 
@@ -252,23 +252,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $('mm-save-btn')?.addEventListener('click', () => {
         const cfg = {
-            groupId: $('mm-group-id')?.value.trim()||'',
-            apiKey:  $('mm-api-key')?.value.trim()||'',
-            voiceId: $('mm-voice-id')?.value||'female-tianmei',
-            lang:    getActiveLang(),
-            speed:   parseFloat($('mm-speed')?.value||1.0),
-            vol:     parseFloat($('mm-vol')?.value||1.0),
-            pitch:   parseFloat($('mm-pitch')?.value||0),
+            groupId: $('mm-group-id')?.value.trim() || '',
+            apiKey: $('mm-api-key')?.value.trim() || '',
+            voiceId: $('mm-voice-id')?.value.trim() || '',
+            lang: getActiveLang(),
+            speed: parseFloat($('mm-speed')?.value || 1.0),
+            vol: parseFloat($('mm-vol')?.value || 1.0),
+            pitch: parseFloat($('mm-pitch')?.value || 0),
         };
         localStorage.setItem('sim_minimax_cfg', JSON.stringify(cfg));
-        toast('语音配置已保存 ✓','ok');
+        toast('语音配置已保存 ✓', 'ok');
     });
 
     /* ── 试听 ── */
     let currentAudio = null;
     const playBtn = $('mm-preview-btn'), previewStat = $('mm-preview-status');
 
-    function setPreviewStatus(msg, type='') {
+    function setPreviewStatus(msg, type = '') {
         if (!previewStat) return;
         previewStat.textContent = msg;
         previewStat.className = `preview-status ${type}`;
@@ -281,51 +281,51 @@ document.addEventListener('DOMContentLoaded', () => {
             setPreviewStatus(''); return;
         }
         const cfg = getMiniMaxCfg();
-        const groupId = $('mm-group-id')?.value.trim()||cfg.groupId||'';
-        const apiKey  = $('mm-api-key')?.value.trim()||cfg.apiKey||'';
-        const voiceId = $('mm-voice-id')?.value||cfg.voiceId||'female-tianmei';
-        const text    = $('mm-preview-text')?.value.trim();
-        const lang    = getActiveLang();
-        const speed   = parseFloat($('mm-speed')?.value||1.0);
-        const vol     = parseFloat($('mm-vol')?.value||1.0);
-        const pitch   = parseFloat($('mm-pitch')?.value||0);
+        const groupId = $('mm-group-id')?.value.trim() || cfg.groupId || '';
+        const apiKey = $('mm-api-key')?.value.trim() || cfg.apiKey || '';
+        const voiceId = $('mm-voice-id')?.value.trim() || cfg.voiceId || 'female-tianmei';
+        const text = $('mm-preview-text')?.value.trim();
+        const lang = getActiveLang();
+        const speed = parseFloat($('mm-speed')?.value || 1.0);
+        const vol = parseFloat($('mm-vol')?.value || 1.0);
+        const pitch = parseFloat($('mm-pitch')?.value || 0);
 
-        if (!groupId||!apiKey) { setPreviewStatus('请先填写 Group ID 和 API Key','err'); return; }
-        if (!text) { setPreviewStatus('请先输入试听文字','err'); return; }
+        if (!groupId || !apiKey) { setPreviewStatus('请先填写 Group ID 和 API Key', 'err'); return; }
+        if (!text) { setPreviewStatus('请先输入试听文字', 'err'); return; }
 
-        setPreviewStatus('合成中…','loading');
+        setPreviewStatus('合成中…', 'loading');
         playBtn.classList.add('playing'); playBtn.innerHTML = stopIcon();
 
         try {
             const res = await fetch(`https://api.minimax.chat/v1/t2a_v2?GroupId=${groupId}`, {
-                method:'POST',
-                headers:{'Content-Type':'application/json', Authorization:`Bearer ${apiKey}`},
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
                 body: JSON.stringify({
-                    model:'speech-01-turbo', text, stream:false,
-                    voice_setting:{ voice_id:voiceId, speed, vol, pitch:Math.round(pitch) },
-                    audio_setting:{ sample_rate:32000, bitrate:128000, format:'mp3', channel:1 },
-                    language_boost: lang==='zh'?'zh':lang==='ja'?'ja':lang==='ko'?'ko':
-                                    lang==='en'?'en':lang==='fr'?'fr':lang==='de'?'de':
-                                    lang==='es'?'es':lang==='ar'?'ar':'zh',
+                    model: 'speech-01-turbo', text, stream: false,
+                    voice_setting: { voice_id: voiceId, speed, vol, pitch: Math.round(pitch) },
+                    audio_setting: { sample_rate: 32000, bitrate: 128000, format: 'mp3', channel: 1 },
+                    language_boost: lang === 'zh' ? 'zh' : lang === 'ja' ? 'ja' : lang === 'ko' ? 'ko' :
+                        lang === 'en' ? 'en' : lang === 'fr' ? 'fr' : lang === 'de' ? 'de' :
+                            lang === 'es' ? 'es' : lang === 'ar' ? 'ar' : 'zh',
                 }),
             });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
             const audioHex = data?.data?.audio;
             if (!audioHex) throw new Error('未获取到音频数据');
-            const bytes = new Uint8Array(audioHex.match(/.{1,2}/g).map(b=>parseInt(b,16)));
-            const blob = new Blob([bytes],{type:'audio/mpeg'});
-            const url  = URL.createObjectURL(blob);
+            const bytes = new Uint8Array(audioHex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+            const blob = new Blob([bytes], { type: 'audio/mpeg' });
+            const url = URL.createObjectURL(blob);
             currentAudio = new Audio(url);
             currentAudio.play();
-            setPreviewStatus('播放中 ♪','ok');
+            setPreviewStatus('播放中 ♪', 'ok');
             currentAudio.addEventListener('ended', () => {
                 currentAudio = null; playBtn.classList.remove('playing'); playBtn.innerHTML = playIcon();
-                setPreviewStatus('播放完毕','ok'); URL.revokeObjectURL(url);
+                setPreviewStatus('播放完毕', 'ok'); URL.revokeObjectURL(url);
             });
-        } catch(e) {
-            currentAudio=null; playBtn.classList.remove('playing'); playBtn.innerHTML=playIcon();
-            setPreviewStatus(`合成失败：${e.message}`,'err');
+        } catch (e) {
+            currentAudio = null; playBtn.classList.remove('playing'); playBtn.innerHTML = playIcon();
+            setPreviewStatus(`合成失败：${e.message}`, 'err');
         }
     });
 
@@ -340,15 +340,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ── 6a. 色调滤镜 ── */
     const FILTERS = {
-        none:     '',
-        vintage:  'sepia(0.45) saturate(0.8) brightness(0.95) hue-rotate(-8deg)',
+        none: '',
+        vintage: 'sepia(0.45) saturate(0.8) brightness(0.95) hue-rotate(-8deg)',
         dopamine: 'saturate(1.6) brightness(1.05) hue-rotate(10deg) contrast(1.05)',
-        cream:    'sepia(0.18) saturate(0.85) brightness(1.06)',
-        cool:     'hue-rotate(15deg) saturate(0.85) brightness(1.02)',
-        mono:     'grayscale(1) contrast(1.05) brightness(0.98)',
-        rosy:     'hue-rotate(-15deg) saturate(1.1) brightness(1.03)',
-        forest:   'hue-rotate(30deg) saturate(0.9) brightness(0.97)',
-        sunset:   'hue-rotate(-25deg) saturate(1.2) brightness(1.0)',
+        cream: 'sepia(0.18) saturate(0.85) brightness(1.06)',
+        cool: 'hue-rotate(15deg) saturate(0.85) brightness(1.02)',
+        mono: 'grayscale(1) contrast(1.05) brightness(0.98)',
+        rosy: 'hue-rotate(-15deg) saturate(1.1) brightness(1.03)',
+        forest: 'hue-rotate(30deg) saturate(0.9) brightness(0.97)',
+        sunset: 'hue-rotate(-25deg) saturate(1.2) brightness(1.0)',
     };
 
     const phoneScreen = document.querySelector('.phone-screen');
@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (phoneScreen) phoneScreen.style.filter = f;
     }
 
-    function getScreenCfg() { return JSON.parse(localStorage.getItem('sim_screen_cfg')||'{}'); }
+    function getScreenCfg() { return JSON.parse(localStorage.getItem('sim_screen_cfg') || '{}'); }
 
     function initFilterChips() {
         const chips = document.querySelectorAll('.filter-chip');
@@ -388,19 +388,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initPositionPad() {
         const cfg = getScreenCfg();
-        applyOffset(cfg.offsetX||0, cfg.offsetY||0);
+        applyOffset(cfg.offsetX || 0, cfg.offsetY || 0);
 
         const STEP = 4;
         const btnMap = {
-            'pos-up':    ()=>applyOffset(offsetX, offsetY-STEP),
-            'pos-down':  ()=>applyOffset(offsetX, offsetY+STEP),
-            'pos-left':  ()=>applyOffset(offsetX-STEP, offsetY),
-            'pos-right': ()=>applyOffset(offsetX+STEP, offsetY),
+            'pos-up': () => applyOffset(offsetX, offsetY - STEP),
+            'pos-down': () => applyOffset(offsetX, offsetY + STEP),
+            'pos-left': () => applyOffset(offsetX - STEP, offsetY),
+            'pos-right': () => applyOffset(offsetX + STEP, offsetY),
         };
         Object.entries(btnMap).forEach(([id, fn]) => {
             $(id)?.addEventListener('click', fn);
         });
-        $('pos-reset')?.addEventListener('click', () => applyOffset(0,0));
+        $('pos-reset')?.addEventListener('click', () => applyOffset(0, 0));
     }
     initPositionPad();
 
@@ -409,9 +409,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyStatusBarHide(hidden) {
         if (!statusBar) return;
-        statusBar.style.opacity  = hidden ? '0' : '';
+        statusBar.style.opacity = hidden ? '0' : '';
         statusBar.style.pointerEvents = hidden ? 'none' : '';
-        statusBar.style.height   = hidden ? '0' : '';
+        statusBar.style.height = hidden ? '0' : '';
         statusBar.style.overflow = hidden ? 'hidden' : '';
     }
 
@@ -429,75 +429,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initStatusBarToggle();
 
-    /* ── 6d. 系统状态栏颜色（meta theme-color） ── */
-    const PRESET_COLORS = ['#ffffff','#f5f3f0','#1a1a1a','#2c3e50','#f8e8e8','#e8f0f8','#e8f5e8','#fdf6e3'];
-
-    function applyThemeColor(color) {
-        let meta = document.querySelector('meta[name="theme-color"]');
-        if (!meta) {
-            meta = document.createElement('meta');
-            meta.name = 'theme-color';
-            document.head.appendChild(meta);
-        }
-        meta.content = color;
-    }
-
-    function initThemeColorPicker() {
-        const container = $('statusbar-color-presets');
-        if (!container) return;
-        const cfg = getScreenCfg();
-        const savedColor = cfg.themeColor || '#ffffff';
-        applyThemeColor(savedColor);
-
-        container.innerHTML = '';
-        PRESET_COLORS.forEach(color => {
-            const dot = document.createElement('div');
-            dot.className = `statusbar-color-preset${color===savedColor?' active':''}`;
-            dot.style.background = color;
-            dot.style.outline = color==='#ffffff' ? '1px solid rgba(0,0,0,0.1)' : '';
-            dot.addEventListener('click', () => {
-                container.querySelectorAll('.statusbar-color-preset').forEach(d=>d.classList.remove('active'));
-                dot.classList.add('active');
-                const cp = $('statusbar-custom-color');
-                if (cp) cp.value = color;
-                applyThemeColor(color);
-            });
-            container.appendChild(dot);
-        });
-
-        const cp = $('statusbar-custom-color');
-        if (cp) {
-            cp.value = savedColor;
-            cp.addEventListener('input', () => {
-                container.querySelectorAll('.statusbar-color-preset').forEach(d=>d.classList.remove('active'));
-                applyThemeColor(cp.value);
-            });
-        }
-    }
-    initThemeColorPicker();
-
     /* ── 6e. 屏幕调整保存 ── */
     $('screen-save-btn')?.addEventListener('click', () => {
         const activeChip = document.querySelector('.filter-chip.active');
-        const activeColor = $('statusbar-custom-color')?.value || '#ffffff';
         const cfg = {
-            filter:        activeChip?.dataset.filter || 'none',
+            filter: activeChip?.dataset.filter || 'none',
             offsetX,
             offsetY,
             hideStatusBar: !!$('toggle-statusbar')?.classList.contains('on'),
-            themeColor:    activeColor,
         };
         localStorage.setItem('sim_screen_cfg', JSON.stringify(cfg));
-        toast('屏幕设置已保存 ✓','ok');
+        toast('屏幕设置已保存 ✓', 'ok');
     });
 
     /* ── 页面加载时也恢复屏幕设置 ── */
     (() => {
         const cfg = getScreenCfg();
-        applyFilter(cfg.filter||'none');
-        applyOffset(cfg.offsetX||0, cfg.offsetY||0);
+        applyFilter(cfg.filter || 'none');
+        applyOffset(cfg.offsetX || 0, cfg.offsetY || 0);
         applyStatusBarHide(!!cfg.hideStatusBar);
-        if (cfg.themeColor) applyThemeColor(cfg.themeColor);
     })();
 
 });
