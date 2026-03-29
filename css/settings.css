@@ -1152,3 +1152,302 @@ input[type="range"].st-slider::-webkit-slider-thumb {
     letter-spacing: 0.15px;
     padding-left: 1px;
 }
+
+/* ════════════════════════════════════════
+   字体图标
+   ════════════════════════════════════════ */
+.st-icon.font {
+    background: linear-gradient(135deg, #ece8f0, #e2dcea);
+}
+
+.st-icon.font svg {
+    stroke: #8a7abf;
+}
+
+/* ════════════════════════════════════════
+   壁纸层（最底层，绝对定位，不影响任何子元素）
+   ════════════════════════════════════════ */
+.wp-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    /* 默认透明，有壁纸时 JS 设置 */
+}
+
+/* 毛玻璃叠层 */
+.wp-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    /* JS 控制 background / backdrop-filter */
+}
+
+/* 天气画布 */
+.weather-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+}
+
+/* homescreen 和 home-content 相对定位保证层叠 */
+.homescreen {
+    position: relative;
+}
+
+/* home-content 在壁纸上方 */
+.home-content {
+    position: relative;
+    z-index: 3;
+}
+
+/* 状态栏也要在壁纸上方 */
+.status-bar {
+    position: relative;
+    z-index: 4;
+}
+
+/* ════════════════════════════════════════
+   壁纸更换子页
+   ════════════════════════════════════════ */
+
+/* 选图行 */
+.wp-pick-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+}
+
+/* 缩略图容器 */
+.wp-thumb-wrap {
+    width: 72px;
+    flex-shrink: 0;
+}
+
+.wp-thumb {
+    width: 72px;
+    height: 52px;
+    border-radius: 8px;
+    background: rgba(240, 238, 234, 0.8);
+    border: 1px solid rgba(210, 205, 198, 0.45);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background-size: cover;
+    background-position: center;
+}
+
+.wp-thumb svg {
+    width: 18px;
+    height: 18px;
+    stroke: rgba(165, 160, 152, 0.6);
+    fill: none;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.wp-thumb span {
+    font-size: 9px;
+    color: rgba(165, 160, 152, 0.7);
+    letter-spacing: 0.3px;
+}
+
+/* 操作按钮组 */
+.wp-pick-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex: 1;
+}
+
+.wp-btn {
+    display: block;
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 10px;
+    background: rgba(245, 244, 241, 0.85);
+    border: 1px solid rgba(205, 200, 193, 0.5);
+    color: var(--text-primary);
+    font-size: 12.5px;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    transition: opacity 0.15s, background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.wp-btn:active {
+    opacity: 0.7;
+    background: rgba(232, 230, 226, 0.95);
+}
+
+.wp-btn-clear {
+    color: rgba(180, 120, 120, 0.85);
+    background: rgba(248, 242, 242, 0.85);
+    border-color: rgba(210, 180, 180, 0.45);
+}
+
+/* ════════════════════════════════════════
+   天气效果网格
+   ════════════════════════════════════════ */
+.weather-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 12px 14px;
+}
+
+.weather-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    padding: 8px 4px;
+    border-radius: 10px;
+    border: 1.5px solid transparent;
+    transition: background 0.15s, border-color 0.15s, transform 0.12s;
+}
+
+.weather-chip:active {
+    transform: scale(0.93);
+}
+
+.weather-chip.active {
+    background: rgba(232, 230, 225, 0.7);
+    border-color: rgba(190, 185, 178, 0.6);
+}
+
+.weather-icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: rgba(245, 244, 241, 0.8);
+    border: 1px solid rgba(210, 205, 198, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.weather-chip.active .weather-icon-wrap {
+    background: rgba(225, 222, 218, 0.9);
+}
+
+.weather-icon-wrap svg {
+    width: 18px;
+    height: 18px;
+    stroke: rgba(120, 116, 110, 0.75);
+    fill: none;
+}
+
+.weather-chip-name {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+}
+
+.weather-chip.active .weather-chip-name {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* ════════════════════════════════════════
+   字体更换子页
+   ════════════════════════════════════════ */
+.font-list {
+    padding: 8px 0;
+}
+
+.font-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.font-item+.font-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 0;
+    height: 0.5px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.font-item:active {
+    background: rgba(0, 0, 0, 0.025);
+}
+
+.font-item-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(180, 176, 168, 0.6);
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.font-item.active .font-item-dot {
+    background: rgba(140, 136, 128, 0.7);
+    border-color: rgba(140, 136, 128, 0.7);
+}
+
+.font-item-info {
+    flex: 1;
+}
+
+.font-item-name {
+    font-size: 13px;
+    color: var(--text-primary);
+    letter-spacing: 0.1px;
+    margin-bottom: 3px;
+}
+
+.font-item-sample {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+}
+
+/* 字体预览框 */
+.font-preview-box {
+    padding: 18px 20px;
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.font-preview-text {
+    font-size: 16px;
+    color: var(--text-primary);
+    line-height: 1.7;
+    text-align: center;
+    letter-spacing: 0.5px;
+    transition: font-family 0.3s;
+}
+
+.font-preview-en {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
