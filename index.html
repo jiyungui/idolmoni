@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>simulator</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/phone.css">
+    <link rel="stylesheet" href="css/homescreen.css">
+    <link rel="stylesheet" href="css/widgets.css">
+    <link rel="stylesheet" href="css/apps.css">
+    <link rel="stylesheet" href="css/settings.css">
+</head>
+
+<body>
+
+    <div class="phone-shell">
+        <div class="phone-screen">
+
+            <!-- 灵动岛 -->
+            <div class="dynamic-island"></div>
+
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <span class="status-time" id="statusTime">09:41</span>
+                <div class="status-icons">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round">
+                        <rect x="2" y="16" width="3" height="5" rx="1" fill="currentColor" stroke="none" />
+                        <rect x="7" y="12" width="3" height="9" rx="1" fill="currentColor" stroke="none" />
+                        <rect x="12" y="8" width="3" height="13" rx="1" fill="currentColor" stroke="none" />
+                        <rect x="17" y="4" width="3" height="17" rx="1" fill="currentColor" stroke="none"
+                            opacity="0.3" />
+                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round">
+                        <path d="M5 12.55a11 11 0 0 1 14 0" />
+                        <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                        <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                        <circle cx="12" cy="20" r="1.2" fill="currentColor" stroke="none" />
+                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round">
+                        <rect x="2" y="7" width="18" height="11" rx="2" />
+                        <path d="M22 11v3" stroke-width="2.5" />
+                        <rect x="3.5" y="8.5" width="12" height="8" rx="1" fill="currentColor" stroke="none"
+                            opacity="0.6" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- ════ 主屏 ════ -->
+            <div class="homescreen">
+                <div class="home-content">
+
+                    <!-- ▌顶部小组件 -->
+                    <div class="top-widget">
+                        <div class="tw-header">
+
+                            <!-- 头像：整体可点击换图，input 完全隐藏在容器内 -->
+                            <div class="tw-avatar" id="avatarWrapper">
+                                <img id="avatarImg" alt="">
+                                <svg id="avatarPlaceholder" viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="4" />
+                                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                                </svg>
+                            </div>
+
+                            <!-- 状态文字：点击直接 contenteditable -->
+                            <div class="tw-status-text tw-editable" id="statusText" data-placeholder="点击编辑状态"
+                                contenteditable="true" spellcheck="false">幸好爱是小小的奇迹</div>
+
+                            <!-- 爪印 -->
+                            <svg class="tw-paw" viewBox="0 0 24 24" fill="none" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <ellipse cx="12" cy="17" rx="5" ry="4" />
+                                <circle cx="6" cy="12" r="2" />
+                                <circle cx="18" cy="12" r="2" />
+                                <circle cx="9" cy="9" r="1.5" />
+                                <circle cx="15" cy="9" r="1.5" />
+                            </svg>
+                        </div>
+
+                        <!-- Baby：点击值区域直接编辑 -->
+                        <div class="tw-info-row">
+                            <span class="tw-label">Baby</span>
+                            <span class="tw-value tw-editable" id="babyText" data-placeholder="输入昵称"
+                                contenteditable="true" spellcheck="false">call Aero</span>
+                        </div>
+
+                        <!-- Contact：点击值区域直接编辑 -->
+                        <div class="tw-info-row">
+                            <span class="tw-label">Contact</span>
+                            <span class="tw-value tw-editable" id="contactText" data-placeholder="输入链接"
+                                contenteditable="true" spellcheck="false">http//>Aero's love.com</span>
+                        </div>
+                    </div>
+
+                    <!-- ▌小组件行 -->
+                    <div class="widget-row">
+
+                        <!-- 左：宝丽来叠层·浅灰毛玻璃·可换图 -->
+                        <div class="widget-glass" id="glassWidget">
+
+                            <!-- 回形针 -->
+                            <div class="polaroid-clip">
+                                <svg viewBox="0 0 28 28">
+                                    <!-- 回形针路径：大U形套小U形 -->
+                                    <path d="M14 3
+               C10 3 7 6 7 10
+               L7 20
+               C7 23.3 9.7 26 13 26
+               C16.3 26 19 23.3 19 20
+               L19 10
+               C19 8.3 17.7 7 16 7
+               C14.3 7 13 8.3 13 10
+               L13 19
+               C13 19.6 13.4 20 14 20
+               C14.6 20 15 19.6 15 19
+               L15 10" />
+                                </svg>
+                            </div>
+
+                            <!-- 背景叠片 -->
+                            <div class="polaroid-back"></div>
+
+                            <!-- 主卡 -->
+                            <div class="polaroid-main">
+
+                                <!-- 图片区 -->
+                                <div class="polaroid-img-area">
+                                    <img class="wg-img" id="glassImg" alt="">
+                                    <div class="wg-placeholder" id="glassPlaceholder">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <rect x="3" y="3" width="18" height="18" rx="3" />
+                                            <circle cx="8.5" cy="8.5" r="1.5" />
+                                            <polyline points="21 15 16 10 5 21" />
+                                        </svg>
+                                        <span>点击添加图片</span>
+                                    </div>
+                                </div>
+
+                                <!-- 底部标题条（可点击编辑） -->
+                                <div class="polaroid-caption-bar">
+                                    <span class="polaroid-caption" id="polaroidCaption" contenteditable="true"
+                                        spellcheck="false" data-placeholder="First Choice">First Choice</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- 右：图片框，点击换图 -->
+                        <div class="widget-photo-edit" id="photoWidget">
+                            <img id="photoImg" alt="">
+                            <div class="photo-placeholder" id="photoPlaceholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="3" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
+                                <span>点击添加图片</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 页面指示器 -->
+                    <div class="page-dots">
+                        <div class="page-dot active"></div>
+                    </div>
+
+                    <!-- ▌APP 网格 -->
+                    <div class="app-grid">
+
+                        <div class="app-item" data-app="renmai">
+                            <div class="app-icon renmai">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                            </div>
+                            <span class="app-label">人脉</span>
+                        </div>
+
+                        <div class="app-item" data-app="weibo">
+                            <div class="app-icon weibo">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    <line x1="8" y1="10" x2="8.01" y2="10" />
+                                    <line x1="12" y1="10" x2="12.01" y2="10" />
+                                    <line x1="16" y1="10" x2="16.01" y2="10" />
+                                </svg>
+                            </div>
+                            <span class="app-label">微博</span>
+                        </div>
+
+                        <div class="app-item" data-app="bubble">
+                            <div class="app-icon bubble">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="9" />
+                                    <line x1="8" y1="12" x2="8.01" y2="12" />
+                                    <line x1="12" y1="12" x2="12.01" y2="12" />
+                                    <line x1="16" y1="12" x2="16.01" y2="12" />
+                                </svg>
+                            </div>
+                            <span class="app-label">bubble</span>
+                        </div>
+
+                        <div class="app-item" data-app="douban">
+                            <div class="app-icon douban">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="5" rx="1" />
+                                    <path d="M5 8v8a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V8" />
+                                    <line x1="9" y1="21" x2="9" y2="16" />
+                                    <line x1="15" y1="21" x2="15" y2="16" />
+                                </svg>
+                            </div>
+                            <span class="app-label">豆瓣</span>
+                        </div>
+
+                        <div class="app-item" data-app="music">
+                            <div class="app-icon music">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M9 18V5l12-2v13" />
+                                    <circle cx="6" cy="18" r="3" />
+                                    <circle cx="18" cy="16" r="3" />
+                                </svg>
+                            </div>
+                            <span class="app-label">音乐</span>
+                        </div>
+
+                        <div class="app-item" data-app="settings">
+                            <div class="app-icon settings">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3" />
+                                    <path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41
+                         M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41
+                         M21 12h-2M5 12H3M12 21v-2M12 5V3" />
+                                </svg>
+                            </div>
+                            <span class="app-label">设置</span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ════ Dock ════ -->
+            <div class="dock">
+
+                <div class="app-item" data-app="daworld">
+                    <div class="app-icon daworld">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M2 12h20" />
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10
+                     15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                        </svg>
+                    </div>
+                    <span class="app-label">大世界</span>
+                </div>
+
+                <div class="app-item" data-app="profile">
+                    <div class="app-icon profile">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <span class="app-label">个人主页</span>
+                </div>
+
+                <div class="app-item" data-app="social">
+                    <div class="app-icon social">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                    </div>
+                    <span class="app-label">社交</span>
+                </div>
+
+            </div>
+
+            <div class="home-indicator"></div>
+
+            <!-- ════ APP 内页 ════ -->
+
+            <div class="app-page" id="app-renmai">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">人脉</span>
+                </div>
+                <div class="app-body">
+                    <div class="app-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                        <p>人脉 — 内容开发中</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-page" id="app-daworld">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">大世界</span>
+                </div>
+                <div class="app-body">
+                    <div class="app-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10z" />
+                        </svg>
+                        <p>大世界 — 内容开发中</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-page" id="app-social">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">社交</span>
+                </div>
+                <div class="app-body">
+                    <div class="app-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                        <p>社交 — 内容开发中</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-page" id="app-weibo">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">微博</span>
+                </div>
+                <div class="app-body">
+                    <div class="app-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                        <p>微博 — 内容开发中</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-page" id="app-profile">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">个人主页</span>
+                </div>
+                <div class="app-body">
+                    <div class="app-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <p>个人主页 — 内容开发中</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-page" id="app-bubble">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">bubble</span>
+                </div>
+                <div class="app-body">
+                    <div class="app-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round">
+                            <circle cx="12" cy="12" r="9" />
+                        </svg>
+                        <p>bubble — 内容开发中</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-page" id="app-douban">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">豆瓣</span>
+                </div>
+                <div class="app-body">
+                    <div class="app-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round">
+                            <rect x="3" y="3" width="18" height="5" rx="1" />
+                            <path d="M5 8v8a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V8" />
+                        </svg>
+                        <p>豆瓣 — 内容开发中</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-page" id="app-music">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">音乐</span>
+                </div>
+                <div class="app-body">
+                    <div class="app-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round">
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
+                        </svg>
+                        <p>音乐 — 内容开发中</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ════ 设置主页 ════ -->
+            <div class="app-page" id="app-settings">
+                <div class="app-nav">
+                    <div class="app-nav-back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </div>
+                    <span class="app-nav-title">设置</span>
+                </div>
+
+                <div class="app-body settings-body">
+
+                    <div class="st-section-title">功能配置</div>
+
+                    <div class="st-card">
+
+                        <!-- API 设置 -->
+                        <div class="st-row" id="st-goto-api">
+                            <div class="st-icon api">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M10 20l4-16M6.5 8.5L3 12l3.5 3.5M17.5 8.5L21 12l-3.5 3.5" />
+                                </svg>
+                            </div>
+                            <div class="st-text">
+                                <span class="st-label">API 设置</span>
+                                <span class="st-desc">配置模型接口与语音</span>
+                            </div>
+                            <svg class="st-arrow" viewBox="0 0 24 24">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </div>
+
+                        <!-- 屏幕调整 -->
+                        <div class="st-row" id="st-goto-screen">
+                            <div class="st-icon screen">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                                    <line x1="8" y1="21" x2="16" y2="21" />
+                                    <line x1="12" y1="17" x2="12" y2="21" />
+                                </svg>
+                            </div>
+                            <div class="st-text">
+                                <span class="st-label">屏幕调整</span>
+                                <span class="st-desc">色调滤镜 · 位置 · 状态栏</span>
+                            </div>
+                            <svg class="st-arrow" viewBox="0 0 24 24">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </div>
+
+                        <!-- 壁纸更换 -->
+                        <div class="st-row" id="st-goto-wallpaper">
+                            <div class="st-icon wallpaper">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="3" y="3" width="18" height="18" rx="3" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
+                            </div>
+                            <div class="st-text">
+                                <span class="st-label">壁纸更换</span>
+                                <span class="st-desc">自定义主屏背景</span>
+                            </div>
+                            <svg class="st-arrow" viewBox="0 0 24 24">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </div>
+
+                        <!-- 应用图标更换 -->
+                        <div class="st-row" id="st-goto-appicon">
+                            <div class="st-icon appicon">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="3" y="3" width="8" height="8" rx="2" />
+                                    <rect x="13" y="3" width="8" height="8" rx="2" />
+                                    <rect x="3" y="13" width="8" height="8" rx="2" />
+                                    <rect x="13" y="13" width="8" height="8" rx="2" />
+                                </svg>
+                            </div>
+                            <div class="st-text">
+                                <span class="st-label">应用图标更换</span>
+                                <span class="st-desc">自定义各应用图标</span>
+                            </div>
+                            <svg class="st-arrow" viewBox="0 0 24 24">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </div>
+
+                        <!-- 数据管理 -->
+                        <div class="st-row" id="st-goto-data">
+                            <div class="st-icon data">
+                                <svg viewBox="0 0 24 24">
+                                    <ellipse cx="12" cy="5" rx="9" ry="3" />
+                                    <path d="M21 12c0 1.66-4 3-9 3S3 13.66 3 12" />
+                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                                </svg>
+                            </div>
+                            <div class="st-text">
+                                <span class="st-label">数据管理</span>
+                                <span class="st-desc">导入导出 · 清除缓存</span>
+                            </div>
+                            <svg class="st-arrow" viewBox="0 0 24 24">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </div>
+
+                    </div><!-- /st-card -->
+
+                </div><!-- /settings-body -->
+
+
+                <!-- ════ API 设置子页（嵌套在设置页内） ════ -->
+                <div class="api-page" id="api-settings-page">
+                    <div class="app-nav">
+                        <div class="app-nav-back" id="api-back">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                        </div>
+                        <span class="app-nav-title">API 设置</span>
+                    </div>
+
+                    <div class="api-body">
+
+                        <!-- ── 基础配置 ── -->
+                        <div class="st-section-title">接口配置</div>
+                        <div class="api-card">
+
+                            <div class="api-field">
+                                <span class="api-field-label">名称</span>
+                                <input id="api-name" type="text" placeholder="如 OpenAI / 本地" />
+                            </div>
+
+                            <div class="api-field">
+                                <span class="api-field-label">API URL</span>
+                                <input id="api-url" type="url" placeholder="https://api.openai.com/v1" />
+                            </div>
+
+                            <div class="api-field">
+                                <span class="api-field-label">API Key</span>
+                                <input id="api-key" type="password" placeholder="sk-…" />
+                            </div>
+
+                            <!-- 选取模型 -->
+                            <div class="api-field">
+                                <span class="api-field-label">选取模型</span>
+                                <select id="api-model-select">
+                                    <option value="" disabled selected>先拉取模型</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <!-- ── 操作按钮 ── -->
+                        <div class="api-btn-row">
+                            <button class="api-btn fetch" id="api-fetch-btn">拉取模型</button>
+                            <button class="api-btn test" id="api-test-btn">测试模型</button>
+                            <button class="api-btn save" id="api-save-btn">保存模型</button>
+                        </div>
+
+                        <!-- 状态提示 -->
+                        <div class="api-status" id="api-status"></div>
+
+                        <!-- ── 模型列表 ── -->
+                        <div class="model-list-wrap">
+                            <div class="model-list-title">模型列表</div>
+                            <div class="model-list" id="model-list-container">
+                                <!-- JS 渲染 -->
+                            </div>
+                        </div>
+
+                        <!-- ════ MiniMax 语音配置 ════ -->
+                        <div class="minimax-section">
+                            <div class="minimax-header">
+                                <span class="minimax-badge">MiniMax</span>
+                                <span class="minimax-title">语音合成配置</span>
+                            </div>
+
+                            <div class="minimax-card">
+
+                                <!-- Group ID -->
+                                <div class="api-field">
+                                    <span class="api-field-label">Group ID</span>
+                                    <input id="mm-group-id" type="text" placeholder="MiniMax Group ID" />
+                                </div>
+
+                                <!-- API Key -->
+                                <div class="api-field">
+                                    <span class="api-field-label">API Key</span>
+                                    <input id="mm-api-key" type="password" placeholder="MiniMax API Key" />
+                                </div>
+
+                                <!-- 语言选择 -->
+                                <div class="lang-select-wrap">
+                                    <div class="lang-select-label">语言 / Language</div>
+                                    <div class="lang-grid" id="mm-lang-grid">
+                                        <!-- JS 渲染 -->
+                                    </div>
+                                </div>
+
+                                <!-- 语速 -->
+                                <div class="slider-row">
+                                    <div class="slider-top">
+                                        <span class="slider-label">语速</span>
+                                        <span class="slider-value" id="mm-speed-val">1.0</span>
+                                    </div>
+                                    <input type="range" class="st-slider" id="mm-speed" min="0.5" max="2.0" step="0.1"
+                                        value="1.0" style="--pct:33.3%">
+                                </div>
+
+                                <!-- 音量 -->
+                                <div class="slider-row">
+                                    <div class="slider-top">
+                                        <span class="slider-label">音量</span>
+                                        <span class="slider-value" id="mm-vol-val">1.0</span>
+                                    </div>
+                                    <input type="range" class="st-slider" id="mm-vol" min="0.1" max="2.0" step="0.1"
+                                        value="1.0" style="--pct:47.4%">
+                                </div>
+
+                                <!-- 音调 -->
+                                <div class="slider-row">
+                                    <div class="slider-top">
+                                        <span class="slider-label">音调</span>
+                                        <span class="slider-value" id="mm-pitch-val">0.0</span>
+                                    </div>
+                                    <input type="range" class="st-slider" id="mm-pitch" min="-12" max="12" step="1"
+                                        value="0" style="--pct:50%">
+                                </div>
+
+                                <!-- 试听 -->
+                                <div class="preview-row">
+                                    <div class="preview-label">试听</div>
+                                    <div class="preview-input-row">
+                                        <input class="preview-text-input" id="mm-preview-text" type="text"
+                                            placeholder="输入文字，点击播放试听…" />
+                                        <button class="preview-play-btn" id="mm-preview-btn">
+                                            <svg viewBox="0 0 24 24">
+                                                <polygon points="5 3 19 12 5 21 5 3" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="preview-status" id="mm-preview-status"></div>
+                                </div>
+
+                                <!-- 保存 -->
+                                <div class="minimax-save-row">
+                                    <button class="minimax-save-btn" id="mm-save-btn">保存语音配置</button>
+                                </div>
+
+                            </div><!-- /minimax-card -->
+                        </div><!-- /minimax-section -->
+
+                    </div><!-- /api-body -->
+                </div><!-- /api-settings-page -->
+
+                <!-- ════ 屏幕调整子页 ════ -->
+                <div class="api-page" id="screen-settings-page">
+                    <div class="app-nav">
+                        <div class="app-nav-back" id="screen-back">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                        </div>
+                        <span class="app-nav-title">屏幕调整</span>
+                    </div>
+
+                    <div class="api-body">
+
+                        <!-- ── 色调滤镜 ── -->
+                        <div class="st-section-title">色调滤镜</div>
+                        <div class="api-card">
+                            <div class="filter-grid">
+                                <div class="filter-chip" data-filter="none">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">原色</span>
+                                </div>
+                                <div class="filter-chip" data-filter="vintage">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">复古</span>
+                                </div>
+                                <div class="filter-chip" data-filter="dopamine">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">多巴胺</span>
+                                </div>
+                                <div class="filter-chip" data-filter="cream">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">奶油</span>
+                                </div>
+                                <div class="filter-chip" data-filter="cool">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">清冷</span>
+                                </div>
+                                <div class="filter-chip" data-filter="mono">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">黑白</span>
+                                </div>
+                                <div class="filter-chip" data-filter="rosy">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">玫瑰</span>
+                                </div>
+                                <div class="filter-chip" data-filter="forest">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">森林</span>
+                                </div>
+                                <div class="filter-chip" data-filter="sunset">
+                                    <div class="filter-preview"></div>
+                                    <span class="filter-chip-name">日落</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ── 屏幕位置 ── -->
+                        <div class="st-section-title">屏幕位置</div>
+                        <div class="api-card">
+                            <div class="pos-pad-wrap">
+                                <div class="pos-pad-label">拖动调整屏幕上下左右位置</div>
+                                <div class="pos-dpad">
+                                    <!-- 上 -->
+                                    <div></div>
+                                    <div class="pos-btn" id="pos-up">
+                                        <svg viewBox="0 0 24 24">
+                                            <polyline points="18 15 12 9 6 15" />
+                                        </svg>
+                                    </div>
+                                    <div></div>
+                                    <!-- 左 中 右 -->
+                                    <div class="pos-btn" id="pos-left">
+                                        <svg viewBox="0 0 24 24">
+                                            <polyline points="15 18 9 12 15 6" />
+                                        </svg>
+                                    </div>
+                                    <div class="pos-btn center">
+                                        <svg viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="2" />
+                                        </svg>
+                                    </div>
+                                    <div class="pos-btn" id="pos-right">
+                                        <svg viewBox="0 0 24 24">
+                                            <polyline points="9 18 15 12 9 6" />
+                                        </svg>
+                                    </div>
+                                    <!-- 下 -->
+                                    <div></div>
+                                    <div class="pos-btn" id="pos-down">
+                                        <svg viewBox="0 0 24 24">
+                                            <polyline points="6 9 12 15 18 9" />
+                                        </svg>
+                                    </div>
+                                    <div></div>
+                                </div>
+                                <div class="pos-offset-display" id="pos-offset-display">X: 0px Y: 0px</div>
+                                <button class="pos-reset-btn" id="pos-reset">重置位置</button>
+                            </div>
+                        </div>
+
+                        <!-- ── 状态栏 ── -->
+                        <div class="st-section-title">状态栏</div>
+                        <div class="api-card">
+
+                            <!-- 隐藏状态栏开关 -->
+                            <div class="toggle-row">
+                                <div class="toggle-text">
+                                    <span class="toggle-label">隐藏顶部状态栏</span>
+                                    <span class="toggle-desc">隐藏时间、信号等系统信息</span>
+                                </div>
+                                <div class="st-toggle" id="toggle-statusbar"></div>
+                            </div>
+
+                            <!-- 系统状态栏颜色 -->
+                            <div class="statusbar-color-row">
+                                <div class="statusbar-color-label">系统状态栏颜色（theme-color）</div>
+                                <div class="statusbar-color-presets" id="statusbar-color-presets">
+                                    <!-- JS 渲染 -->
+                                </div>
+                                <div class="statusbar-color-custom-row">
+                                    <span class="statusbar-color-label-sm">自定义颜色</span>
+                                    <input type="color" class="st-color-picker" id="statusbar-custom-color"
+                                        value="#ffffff" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- ── 保存 ── -->
+                        <div class="api-card">
+                            <div class="screen-save-row">
+                                <button class="screen-save-btn" id="screen-save-btn">保存屏幕设置</button>
+                            </div>
+                        </div>
+
+                    </div><!-- /api-body -->
+                </div><!-- /screen-settings-page -->
+
+            </div><!-- /app-settings -->
+
+            <script src="js/grid.js"></script>
+            <script src="js/homescreen.js"></script>
+            <script src="js/photo-widget.js"></script>
+            <script src="js/settings.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,218 @@
+/* ============================================
+   homescreen.css
+   ============================================ */
+
+.homescreen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--status-height);
+    padding-bottom: var(--dock-height);
+    overflow: hidden;
+}
+
+.home-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px var(--grid-padding) 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ── 顶部小组件卡片 ── */
+.top-widget {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-card);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tw-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ── 头像 ── */
+.tw-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-light);
+    overflow: hidden;
+    background: var(--accent-soft);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: opacity 0.15s;
+}
+
+.tw-avatar:active {
+    opacity: 0.8;
+}
+
+.tw-avatar img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    /* JS控制显示 */
+    border-radius: 50%;
+}
+
+.tw-avatar svg {
+    width: 26px;
+    height: 26px;
+    stroke: var(--line-mid);
+}
+
+/* ── 状态文字 ── */
+.tw-status-text {
+    flex: 1;
+    background: rgba(245, 244, 242, 0.7);
+    border: 1px solid var(--line-light);
+    border-radius: 50px;
+    padding: 8px 14px;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    letter-spacing: 0.2px;
+    /* contenteditable 时不换行，靠右截断 */
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* ── 爪印 ── */
+.tw-paw {
+    width: 26px;
+    height: 26px;
+    stroke: var(--line-mid);
+    fill: none;
+    flex-shrink: 0;
+}
+
+/* ── Baby / Contact 行 ── */
+.tw-info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tw-label {
+    font-family: var(--font-en);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    width: 56px;
+    flex-shrink: 0;
+}
+
+.tw-value {
+    flex: 1;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    background: rgba(245, 244, 242, 0.6);
+    border: 1px solid var(--line-light);
+    border-radius: 8px;
+    padding: 5px 10px;
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* ── 可编辑字段通用 ── */
+.tw-editable {
+    cursor: text;
+    outline: none;
+    transition: background 0.15s, box-shadow 0.15s;
+    /* 空内容保留最小高度，确保仍可点击 */
+    min-height: 1.4em;
+}
+
+/* 聚焦态 */
+.tw-editable:focus {
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 0 0 1.5px rgba(180, 176, 170, 0.6) !important;
+    white-space: normal;
+    /* 编辑时允许换行显示全部 */
+    overflow: visible;
+}
+
+/* 空内容时的灰色提示（不影响实际值） */
+.tw-editable:empty::before {
+    content: attr(data-placeholder);
+    color: var(--text-muted);
+    font-style: italic;
+    pointer-events: none;
+}
+
+/* ── 小组件行 ── */
+.widget-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--grid-gap);
+}
+
+/* ── APP 网格 ── */
+.app-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--grid-gap);
+}
+
+/* ── Dock ── */
+.dock {
+    position: absolute;
+    bottom: 18px;
+    left: var(--grid-padding);
+    right: var(--grid-padding);
+    height: 72px;
+    background: var(--bg-dock);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: var(--shadow-float);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 20px;
+    z-index: 50;
+}
+
+/* ── 页面指示点 ── */
+.page-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 0;
+}
+
+.page-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--line-mid);
+    transition: all 0.3s ease;
+}
+
+.page-dot.active {
+    width: 20px;
+    border-radius: 3px;
+    background: var(--accent);
+}
