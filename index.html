@@ -11,12 +11,26 @@
     <link rel="stylesheet" href="css/widgets.css">
     <link rel="stylesheet" href="css/apps.css">
     <link rel="stylesheet" href="css/settings.css">
+
+    <!-- PWA：添加到桌面全屏 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Simulator">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <meta name="theme-color" content="#f0ede8">
 </head>
 
 <body>
 
     <div class="phone-shell">
         <div class="phone-screen">
+
+            <!-- 壁纸层：phone-screen 级，完整覆盖包括 dock 和 home-indicator -->
+            <div class="wp-layer" id="wpLayer"></div>
+            <div class="wp-overlay" id="wpOverlay"></div>
+            <canvas class="weather-canvas" id="weatherCanvas"></canvas>
 
             <!-- 状态栏 -->
             <div class="status-bar">
@@ -49,14 +63,6 @@
 
             <!-- ════ 主屏 ════ -->
             <div class="homescreen">
-
-                <!-- 壁纸层：在最底层，不影响其他任何元素 -->
-                <div class="wp-layer" id="wpLayer"></div>
-                <!-- 壁纸滤镜叠层（不透明度/毛玻璃/模糊） -->
-                <div class="wp-overlay" id="wpOverlay"></div>
-
-                <!-- 天气动效层 -->
-                <canvas class="weather-canvas" id="weatherCanvas"></canvas>
 
                 <div class="home-content">
 
@@ -1187,6 +1193,13 @@
             <script src="js/homescreen.js"></script>
             <script src="js/photo-widget.js"></script>
             <script src="js/settings.js"></script>
+            <script>
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', () => {
+                        navigator.serviceWorker.register('./sw.js').catch(() => { });
+                    });
+                }
+            </script>
 </body>
 
 </html>
