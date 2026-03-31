@@ -1,93 +1,48 @@
-/* ============================================
-   grid.js — 网格计算引擎
-   参考 GIGI HomeScreen 架构
-   ============================================ */
-
+/* ========================================
+   grid.js — 网格计算 & 运行时尺寸适配
+   参考 GIGI 思路：存语义坐标，渲染时换算像素
+   ======================================== */
 const Grid = (() => {
 
-    const CONFIG = {
-        COLUMNS: 3,
-        ICON_SIZE: 56,
-        GAP: 12,
-        PADDING: 18,
-        STATUS_H: 44,
-        DOCK_H: 90,
-    };
+    /* 读取手机屏幕实际可用宽度 */
+    function getScreenWidth() {
+        const screen = document.getElementById('phoneScreen');
+        return screen ? screen.clientWidth : window.innerWidth;
+    }
 
-    /**
-     * 根据容器实际宽度计算网格参数
-     * @param {number} containerW - 手机内容区实际宽度
-     * @param {number} containerH - 手机内容区实际高度
+    /* 核心：动态计算图标尺寸并写入 CSS 变量
+     * 规则（与 GIGI 思路一致）：
+     *   - 3列布局，列间均分
+     *   - 最大不超过 60px，最小不低于 40px
+     *   - Dock 图标与 APP 图标共用同一变量
      */
-    function calcParams(containerW, containerH) {
-        const contentW = containerW - CONFIG.PADDING * 2;
-        const maxCellW = (contentW - (CONFIG.COLUMNS - 1) * CONFIG.GAP) / CONFIG.COLUMNS;
-        const cellSize = Math.min(CONFIG.ICON_SIZE, maxCellW);
+    function calcAndApplyIconSize() {
+        const screenW = getScreenWidth();
+        const COLS = 3;
+        const H_PAD = 28;          // 左右各14px
+        const COL_GAP = 16;          // 列间距
+        const MAX_SIZE = 60;
+        const MIN_SIZE = 40;
 
-        const availableH = containerH - CONFIG.DOCK_H - CONFIG.STATUS_H - CONFIG.GAP * 2;
-        const rows = Math.max(1, Math.floor(availableH / (cellSize + CONFIG.GAP)));
-
-        const gridContentW = cellSize * CONFIG.COLUMNS + CONFIG.GAP * (CONFIG.COLUMNS - 1);
-        const gridLeftOffset = (contentW - gridContentW) / 2;
-
-        return {
-            COLUMNS: CONFIG.COLUMNS,
-            ROWS: rows,
-            CELL_SIZE: cellSize,
-            GAP: CONFIG.GAP,
-            PADDING: CONFIG.PADDING,
-            LEFT_OFFSET: gridLeftOffset,
-            CONTENT_W: contentW,
-            APPS_PER_PAGE: CONFIG.COLUMNS * rows,
-        };
-    }
-
-    /**
-     * 将网格坐标转换为像素位置
-     */
-    function gridToPixel(gridX, gridY, params) {
-        return {
-            left: params.PADDING + params.LEFT_OFFSET + gridX * (params.CELL_SIZE + params.GAP),
-            top: gridY * (params.CELL_SIZE + params.GAP),
-        };
-    }
-
-    /**
-     * 顺序排列图标到网格（排开小组件占用的位置）
-     * @param {Array} apps - app列表
-     * @param {Array} occupied - 已占用格子列表 [{gridX, gridY, gridW, gridH}]
-     * @param {Object} params - 网格参数
-     */
-    function layoutApps(apps, occupied, params) {
-        const result = [];
-        let idx = 0;
-
-        for (const app of apps) {
-            const pos = findEmptyCell(idx, occupied, params);
-            result.push({ ...app, ...pos });
-            occupied.push({ gridX: pos.gridX, gridY: pos.gridY, gridW: 1, gridH: 1 });
-            idx++;
-        }
-        return result;
-    }
-
-    function findEmptyCell(startIdx, occupied, params) {
-        let col = startIdx % params.COLUMNS;
-        let row = Math.floor(startIdx / params.COLUMNS);
-
-        while (isOccupied(col, row, occupied)) {
-            col++;
-            if (col >= params.COLUMNS) { col = 0; row++; }
-        }
-        return { gridX: col, gridY: row };
-    }
-
-    function isOccupied(col, row, occupied) {
-        return occupied.some(o =>
-            col >= o.gridX && col < o.gridX + (o.gridW || 1) &&
-            row >= o.gridY && row < o.gridY + (o.gridH || 1)
+        // 每列可用宽度
+        const contentW = screenW - H_PAD;
+        const cellW = (contentW - COL_GAP * (COLS - 1)) / COLS;
+        // 图标占格子宽的 75%，留出左右余量
+        const iconSize = Math.round(
+            Math.min(MAX_SIZE, Math.max(MIN_SIZE, cellW * 0.75))
         );
+
+        // 写入 CSS 变量，覆盖 reset.css 里的默认值
+        document.documentElement.style.setProperty('--icon-size', iconSize + 'px');
     }
 
-    return { calcParams, gridToPixel, layoutApps };
+    /* 初始化 + 监听尺寸变化（横竖屏切换等） */
+    function init() {
+        calcAndApplyIconSize();
+        window.addEventListener('resize', calcAndApplyIconSize);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    return { calcAndApplyIconSize };
 })();

@@ -1,0 +1,61 @@
+/* ========================================
+   Reset & 基础全局样式
+   ======================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    /* 关键：撑满整个视口，不允许滚动 */
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #d0d4e0;
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'PingFang SC',
+        'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+:root {
+    --bg-main: #eef0f5;
+    --bg-card: #ffffff;
+    --bg-dock: rgba(255, 255, 255, 0.72);
+    --text-primary: #2c2c34;
+    --text-secondary: #7a7a8c;
+    --text-muted: #b0b0be;
+    --accent: #9ba4c0;
+    --accent-light: #dce0ee;
+    --border: rgba(180, 183, 204, 0.35);
+    --shadow-card: 0 4px 20px rgba(150, 155, 185, 0.14);
+    --shadow-dock: 0 -2px 24px rgba(150, 155, 185, 0.18);
+    --radius-card: 18px;
+    --radius-icon: 16px;
+    --radius-sm: 10px;
+
+    /* 图标统一尺寸 —— 用CSS变量集中管理，手机/桌面均用此值 */
+    --icon-size: 52px;
+}

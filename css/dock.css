@@ -1,0 +1,68 @@
+/* ========================================
+   Dock 栏（大世界、个人主页、社交）
+   图标尺寸与APP图标完全统一：--icon-size
+   ======================================== */
+.dock {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    /* 底部安全区适配（iPhone Home 条） */
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+}
+
+.dock-inner {
+    background: var(--bg-dock);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: var(--shadow-dock);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/* Dock 图标容器 */
+.dock-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* 图标卡片 —— 完全对齐 --icon-size */
+.dock-icon-inner {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: var(--radius-icon);
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 12px rgba(150, 155, 185, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.16s ease, background 0.15s;
+}
+
+.dock-icon-inner svg {
+    width: 46%;
+    height: 46%;
+    color: var(--accent);
+    display: block;
+}
+
+.dock-icon:active .dock-icon-inner {
+    transform: scale(0.88);
+    background: rgba(220, 224, 238, 0.95);
+}
+
+.dock-label {
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}

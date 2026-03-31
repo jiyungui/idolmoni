@@ -1,0 +1,177 @@
+/* ========================================
+   编辑弹窗
+   ======================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(40, 42, 60, 0.38);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-box {
+    background: var(--bg-card);
+    border-radius: 24px 24px 0 0;
+    width: min(390px, 100vw);
+    padding: 0 0 24px;
+    transform: translateY(100%);
+    transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+    box-shadow: 0 -8px 40px rgba(100, 110, 150, 0.18);
+}
+
+.modal-overlay.active .modal-box {
+    transform: translateY(0);
+}
+
+/* 弹窗顶部把手 */
+.modal-box::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: var(--accent-light);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px 10px;
+}
+
+.modal-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+}
+
+.modal-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close svg {
+    width: 14px;
+    height: 14px;
+    color: var(--text-secondary);
+    display: block;
+}
+
+.modal-body {
+    padding: 8px 20px 16px;
+}
+
+/* 文本输入 */
+.modal-input {
+    width: 100%;
+    border: 1.5px solid var(--accent-light);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: rgba(245, 246, 252, 0.7);
+    outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+}
+
+.modal-input:focus {
+    border-color: var(--accent);
+}
+
+/* 图片上传区 */
+.modal-upload {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1.5px dashed var(--accent-light);
+    border-radius: var(--radius-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    background: rgba(245, 246, 252, 0.5);
+    transition: background 0.15s;
+    overflow: hidden;
+    position: relative;
+}
+
+.modal-upload:active {
+    background: var(--accent-light);
+}
+
+.modal-upload svg {
+    width: 36px;
+    height: 36px;
+    color: var(--accent);
+    display: block;
+}
+
+.modal-upload span {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+}
+
+.modal-upload img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 弹窗底部按钮 */
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px;
+}
+
+.modal-btn {
+    flex: 1;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    transition: opacity 0.15s, transform 0.12s;
+}
+
+.modal-btn:active {
+    opacity: 0.75;
+    transform: scale(0.97);
+}
+
+.modal-cancel {
+    background: var(--accent-light);
+    color: var(--text-secondary);
+}
+
+.modal-confirm {
+    background: var(--accent);
+    color: #fff;
+}

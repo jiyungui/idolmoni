@@ -1,0 +1,155 @@
+/* ========================================
+   手机外壳 & 屏幕容器
+   全屏适配策略：
+     手机端（≤480px 或 PWA/standalone）→ 100vw/100vh 无边框
+     桌面浏览器预览 → 显示居中手机壳
+   ======================================== */
+
+/* ---- 桌面预览：手机壳 ---- */
+.phone-shell {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 390px;
+    height: 844px;
+
+    background: var(--bg-main);
+    border-radius: 48px;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.6),
+        0 0 0 2px rgba(160, 165, 190, 0.25),
+        0 24px 80px rgba(100, 110, 150, 0.28),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 刘海（桌面预览用） */
+.phone-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 30px;
+    background: #1a1a22;
+    border-radius: 0 0 20px 20px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* 屏幕区域 */
+.phone-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg-main);
+    position: relative;
+    /* 淡条纹壁纸 */
+    background-image: repeating-linear-gradient(180deg,
+            transparent,
+            transparent 28px,
+            rgba(185, 190, 215, 0.12) 28px,
+            rgba(185, 190, 215, 0.12) 29px);
+}
+
+/* 主滚动区 */
+.home-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* 上方留给状态栏（44px）+ 少量喘息空间 */
+    padding: 52px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.home-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* =========================================
+   手机端全屏适配
+   条件：屏幕宽度 ≤ 480px（真实手机）
+   ========================================= */
+@media screen and (max-width: 480px) {
+    body {
+        background: var(--bg-main);
+    }
+
+    .phone-shell {
+        /* 撑满整个视口 */
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100%;
+        /* 用 100% 而非 100vh，避免iOS地址栏问题 */
+        height: -webkit-fill-available;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    /* 手机端刘海由系统处理，隐藏装饰刘海 */
+    .phone-notch {
+        display: none;
+    }
+
+    /* 状态栏适配安全区 */
+    .status-bar {
+        padding-top: max(10px, env(safe-area-inset-top, 10px));
+        height: auto;
+        min-height: 44px;
+    }
+
+    /* 滚动区上边距随安全区动态调整 */
+    .home-scroll {
+        padding-top: calc(max(10px, env(safe-area-inset-top, 10px)) + 34px);
+    }
+}
+
+/* =========================================
+   PWA 安装后全屏（standalone / fullscreen）
+   ========================================= */
+@media (display-mode: standalone),
+(display-mode: fullscreen) {
+    body {
+        background: var(--bg-main);
+    }
+
+    .phone-shell {
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100vw;
+        height: 100%;
+        height: -webkit-fill-available;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .phone-notch {
+        display: none;
+    }
+
+    .status-bar {
+        padding-top: max(10px, env(safe-area-inset-top, 10px));
+        height: auto;
+        min-height: 44px;
+    }
+
+    .home-scroll {
+        padding-top: calc(max(10px, env(safe-area-inset-top, 10px)) + 34px);
+    }
+}

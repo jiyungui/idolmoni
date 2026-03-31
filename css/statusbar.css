@@ -1,0 +1,52 @@
+/* ========================================
+   状态栏
+   ======================================== */
+.status-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    padding: 10px 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 50;
+    /* 刘海机型左侧时间往右移 */
+    padding-left: 28px;
+}
+
+.status-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.04em;
+}
+
+.status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-signal svg,
+.status-wifi svg,
+.status-battery svg {
+    display: block;
+    color: var(--text-primary);
+}
+
+.status-signal svg {
+    width: 16px;
+    height: 12px;
+}
+
+.status-wifi svg {
+    width: 18px;
+    height: 13px;
+}
+
+.status-battery svg {
+    width: 24px;
+    height: 12px;
+}

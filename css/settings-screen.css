@@ -1,0 +1,573 @@
+/* ================================================
+   settings-screen.css — 屏幕调整页专属样式
+   韩式 ins 线条风 · 胶囊 · 悬浮卡片
+   ================================================ */
+
+/* ---- 分区标签 ---- */
+.sc-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 0 4px;
+    margin: 20px 0 8px;
+}
+
+.sc-section-label:first-child {
+    margin-top: 4px;
+}
+
+/* ---- 重置全部按钮（右上角）---- */
+.sc-reset-all-btn {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--accent-light);
+    background: rgba(245, 246, 252, 0.7);
+    transition: background 0.15s;
+}
+
+.sc-reset-all-btn:active {
+    background: var(--accent-light);
+}
+
+/* ====================================================
+   色调滤镜预设横向滚动列
+   ==================================================== */
+.sc-filter-presets {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px 10px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* 让卡片不被压扁 */
+    scroll-snap-type: x mandatory;
+}
+
+.sc-filter-presets::-webkit-scrollbar {
+    display: none;
+}
+
+/* 单个预设卡片 */
+.sc-preset-card {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    scroll-snap-align: start;
+}
+
+/* 缩略图 */
+.sc-preset-thumb {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: border-color 0.18s, transform 0.14s;
+    position: relative;
+    overflow: hidden;
+    /* 背景渐变模拟各滤镜色感 */
+}
+
+.sc-preset-card.sc-preset-active .sc-preset-thumb {
+    border-color: var(--accent);
+    transform: scale(1.06);
+    box-shadow: 0 4px 14px rgba(155, 164, 192, 0.3);
+}
+
+.sc-preset-card:active .sc-preset-thumb {
+    transform: scale(0.94);
+}
+
+/* 各滤镜预设缩略图背景色 */
+.sc-preset-thumb--none {
+    background: linear-gradient(135deg, #eef0f5, #dce0ee);
+}
+
+.sc-preset-thumb--vintage {
+    background: linear-gradient(135deg, #d4a96a, #c4855a);
+    filter: sepia(0.6) contrast(0.9);
+}
+
+.sc-preset-thumb--dopamine {
+    background: linear-gradient(135deg, #ff6eb4, #ffd93d, #6bcb77);
+}
+
+.sc-preset-thumb--cream {
+    background: linear-gradient(135deg, #f5efe6, #e8d5b7);
+}
+
+.sc-preset-thumb--cyber {
+    background: linear-gradient(135deg, #0d0d1a, #1a0d3a);
+    color: #00ffe7;
+}
+
+.sc-preset-thumb--film {
+    background: linear-gradient(135deg, #b89a7a, #8c6e52);
+    filter: contrast(1.1) saturate(0.7);
+}
+
+.sc-preset-thumb--cool {
+    background: linear-gradient(135deg, #c8dff5, #a0c4e8);
+    filter: hue-rotate(-20deg);
+}
+
+.sc-preset-thumb--warm {
+    background: linear-gradient(135deg, #f5d0a9, #f0a870);
+}
+
+.sc-preset-thumb--nature {
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+    filter: hue-rotate(100deg) saturate(1.3);
+}
+
+.sc-preset-thumb--mono {
+    background: linear-gradient(135deg, #e0e0e0, #9e9e9e);
+    filter: grayscale(1);
+}
+
+.sc-preset-name {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+}
+
+.sc-preset-card.sc-preset-active .sc-preset-name {
+    color: var(--accent);
+}
+
+/* ====================================================
+   通用卡片容器（胶囊白卡）
+   ==================================================== */
+.sc-card {
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.sc-card-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 -4px;
+}
+
+/* 提示文字 */
+.sc-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* ====================================================
+   滑块行
+   ==================================================== */
+.sc-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sc-row-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    width: 58px;
+}
+
+.sc-row-label svg {
+    width: 14px;
+    height: 14px;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.sc-slider-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 基础滑块样式 */
+.sc-slider {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--accent-light);
+    border-radius: 2px;
+    outline: none;
+}
+
+.sc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2.5px solid #fff;
+    box-shadow: 0 1px 6px rgba(155, 164, 192, 0.35);
+    cursor: pointer;
+}
+
+.sc-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2.5px solid #fff;
+    cursor: pointer;
+}
+
+/* 色相滑块渐变背景 */
+.sc-slider--hue {
+    background: linear-gradient(to right,
+            hsl(0, 70%, 65%), hsl(30, 70%, 65%), hsl(60, 70%, 65%),
+            hsl(120, 70%, 65%), hsl(180, 70%, 65%), hsl(240, 70%, 65%),
+            hsl(300, 70%, 65%), hsl(360, 70%, 65%));
+}
+
+.sc-slider-val {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 34px;
+    text-align: right;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+}
+
+/* ====================================================
+   D-Pad 方向盘
+   ==================================================== */
+.sc-dpad-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+}
+
+.sc-dpad {
+    width: 108px;
+    height: 108px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 4px;
+}
+
+.sc-dpad-btn {
+    width: 100%;
+    height: 100%;
+    background: rgba(245, 246, 252, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.14s, transform 0.1s;
+}
+
+.sc-dpad-btn:active {
+    background: var(--accent-light);
+    transform: scale(0.88);
+}
+
+.sc-dpad-btn svg {
+    width: 16px;
+    height: 16px;
+    color: var(--accent);
+    display: block;
+}
+
+.sc-dpad-up {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.sc-dpad-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.sc-dpad-center {
+    grid-column: 2;
+    grid-row: 2;
+    background: rgba(155, 164, 192, 0.12);
+    border-radius: 50%;
+    border: 1.5px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sc-dpad-center svg {
+    width: 22px;
+    height: 22px;
+    color: var(--accent);
+}
+
+.sc-dpad-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.sc-dpad-down {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+/* 偏移量展示 & 归零 */
+.sc-offset-display {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+}
+
+.sc-offset-display span {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.04em;
+}
+
+.sc-offset-reset {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    padding: 4px 12px;
+    border: 1px solid var(--accent-light);
+    border-radius: 10px;
+    background: rgba(245, 246, 252, 0.8);
+    transition: background 0.14s;
+}
+
+.sc-offset-reset:active {
+    background: var(--accent-light);
+}
+
+/* ====================================================
+   Toggle 开关行（隐藏状态栏）
+   ==================================================== */
+.sc-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.sc-toggle-row:active {
+    opacity: 0.75;
+}
+
+.sc-toggle-info {
+    flex: 1;
+}
+
+.sc-toggle-name {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+}
+
+.sc-toggle-desc {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+    margin-top: 2px;
+}
+
+/* 开关本体 */
+.sc-toggle {
+    flex-shrink: 0;
+    width: 46px;
+    height: 26px;
+    border-radius: 13px;
+    background: var(--accent-light);
+    border: 1.5px solid var(--border);
+    position: relative;
+    transition: background 0.22s, border-color 0.22s;
+}
+
+.sc-toggle.on {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.sc-toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(100, 110, 150, 0.2);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sc-toggle.on .sc-toggle-knob {
+    transform: translateX(20px);
+}
+
+/* ====================================================
+   状态栏颜色胶囊
+   ==================================================== */
+.sc-color-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sc-color-pills {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.sc-color-pill {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.18s, transform 0.14s;
+    position: relative;
+}
+
+.sc-color-pill:active {
+    transform: scale(0.88);
+}
+
+.sc-color-pill.sc-pill-active {
+    border-color: var(--accent);
+}
+
+.sc-color-pill.sc-pill-active::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+}
+
+.sc-color-pill--dark {
+    background: #2c2c34;
+}
+
+.sc-color-pill--light {
+    background: #f5f5fa;
+}
+
+/* ====================================================
+   主题色 色块组 + 自定义拾色器
+   ==================================================== */
+.sc-theme-color-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.sc-theme-swatches {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.sc-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(180, 183, 204, 0.3);
+    cursor: pointer;
+    transition: transform 0.14s, border-color 0.18s;
+}
+
+.sc-swatch:active {
+    transform: scale(0.85);
+}
+
+.sc-swatch.sc-swatch-active {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(155, 164, 192, 0.3);
+}
+
+/* 自定义拾色器伪装成色块 */
+.sc-custom-color-wrap {
+    position: relative;
+}
+
+.sc-color-picker {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.sc-color-picker-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 14px;
+    border: 1.5px solid var(--accent-light);
+    background: rgba(245, 246, 252, 0.8);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.sc-color-picker-label:active {
+    background: var(--accent-light);
+}
+
+.sc-color-picker-label svg {
+    width: 13px;
+    height: 13px;
+    display: block;
+}
