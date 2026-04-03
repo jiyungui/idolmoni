@@ -1,6 +1,6 @@
 {
-    "name": "MyPhone",
-    "short_name": "MyPhone",
+    "name": "社畜机",
+    "short_name": "社畜机",
     "description": "手机模拟器主屏",
     "start_url": "./index.html",
     "display": "fullscreen",
@@ -11,12 +11,14 @@
         {
             "src": "assets/icon-192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
             "src": "assets/icon-512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         }
     ]
 }

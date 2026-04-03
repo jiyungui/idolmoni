@@ -1,0 +1,493 @@
+/* ================================================
+   settings-icon.css
+   应用图标更换页 样式
+   韩式 ins 线条风
+   ================================================ */
+
+/* ---- 顶部重置按钮 ---- */
+.it-reset-btn {
+    font-size: 11px;
+    font-weight: 600;
+    color: #c06060;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(200, 120, 110, 0.30);
+    background: rgba(220, 150, 140, 0.10);
+    transition: background 0.15s;
+}
+
+.it-reset-btn:active {
+    background: rgba(220, 150, 140, 0.28);
+}
+
+/* ---- 分区标签 ---- */
+.it-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 0 4px;
+    margin: 20px 0 8px;
+}
+
+.it-section-label:first-child {
+    margin-top: 4px;
+}
+
+/* ---- 通用卡片 ---- */
+.it-card {
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* ====================================================
+   风格预设横向滚动卡
+   ==================================================== */
+.it-style-presets {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px 10px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+}
+
+.it-style-presets::-webkit-scrollbar {
+    display: none;
+}
+
+.it-preset-card {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    scroll-snap-align: start;
+}
+
+/* 缩略图容器：2×2 小图标网格 */
+.it-preset-thumb {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    border: 2px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 8px;
+    transition: border-color 0.18s, transform 0.14s, box-shadow 0.18s;
+}
+
+.it-preset-card.it-preset-active .it-preset-thumb {
+    border-color: var(--accent);
+    transform: scale(1.07);
+    box-shadow: 0 4px 14px rgba(155, 164, 192, 0.30);
+}
+
+.it-preset-card:active .it-preset-thumb {
+    transform: scale(0.92);
+}
+
+/* 小图标方块 */
+.it-thumb-icon {
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+}
+
+.it-preset-card span {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+}
+
+.it-preset-card.it-preset-active span {
+    color: var(--accent);
+}
+
+/* ---- 各预设缩略图风格 ---- */
+/* 默认 */
+.it-thumb--default {
+    background: linear-gradient(135deg, #f0f2f8, #e0e4f0);
+}
+
+.it-thumb--default .it-thumb-icon {
+    background: rgba(155, 164, 192, 0.55);
+    border: 1px solid rgba(155, 164, 192, 0.3);
+}
+
+/* 毛玻璃 */
+.it-thumb--frosted {
+    background: linear-gradient(135deg, rgba(220, 228, 245, 0.9), rgba(200, 210, 235, 0.85));
+}
+
+.it-thumb--frosted .it-thumb-icon {
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(4px);
+}
+
+/* 透明风 */
+.it-thumb--clear {
+    background: linear-gradient(135deg, #d8e8f8, #c0d4ee);
+}
+
+.it-thumb--clear .it-thumb-icon {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+}
+
+/* ins风 */
+.it-thumb--ins {
+    background: linear-gradient(135deg, #f8eef4, #f0dce8);
+}
+
+.it-thumb--ins .it-thumb-icon {
+    background: rgba(200, 160, 180, 0.35);
+    border: 1.5px solid rgba(200, 160, 180, 0.5);
+    border-radius: 8px;
+}
+
+/* 韩系 */
+.it-thumb--korean {
+    background: linear-gradient(135deg, #fdf0e8, #f8ddd0);
+}
+
+.it-thumb--korean .it-thumb-icon {
+    background: rgba(230, 185, 160, 0.40);
+    border: 1.5px solid rgba(210, 160, 140, 0.45);
+    border-radius: 6px;
+}
+
+/* iOS风 */
+.it-thumb--ios {
+    background: linear-gradient(135deg, #e8f0f8, #d0e0f0);
+}
+
+.it-thumb--ios .it-thumb-icon {
+    background: linear-gradient(135deg, rgba(120, 160, 210, 0.55), rgba(80, 130, 200, 0.45));
+    border-radius: 9px;
+}
+
+/* 暗黑 */
+.it-thumb--dark {
+    background: linear-gradient(135deg, #252535, #1a1a28);
+}
+
+.it-thumb--dark .it-thumb-icon {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* 奶油 */
+.it-thumb--cream {
+    background: linear-gradient(135deg, #fdf8f0, #f5ecd8);
+}
+
+.it-thumb--cream .it-thumb-icon {
+    background: rgba(220, 195, 160, 0.38);
+    border: 1.5px solid rgba(200, 170, 130, 0.40);
+    border-radius: 8px;
+}
+
+/* ====================================================
+   自定义图标 3×3 网格
+   ==================================================== */
+.it-tip {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+    line-height: 1.55;
+}
+
+.it-custom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 10px;
+}
+
+/* 单个图标槽 */
+.it-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.it-slot-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    background: rgba(245, 246, 252, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.14s, box-shadow 0.18s, border-color 0.18s;
+    box-shadow: 0 2px 8px rgba(155, 164, 192, 0.15);
+}
+
+.it-slot-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--accent);
+    display: block;
+}
+
+.it-slot-icon img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.it-slot-icon img.loaded {
+    display: block;
+}
+
+.it-slot:active .it-slot-icon {
+    transform: scale(0.92);
+    box-shadow: none;
+}
+
+.it-slot-icon.it-slot-custom {
+    border-color: var(--accent);
+}
+
+/* 已有自定义图时右上角有小标记 */
+.it-slot-badge {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 1.5px solid #fff;
+    display: none;
+}
+
+.it-slot-icon.it-slot-custom .it-slot-badge {
+    display: block;
+}
+
+.it-slot-name {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+    text-align: center;
+    transition: color 0.2s;
+}
+
+/* ====================================================
+   文字颜色选择行
+   ==================================================== */
+.it-color-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.it-color-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+}
+
+.it-color-options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* 颜色圆点按钮 */
+.it-color-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.14s, border-color 0.15s, box-shadow 0.15s;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.it-color-dot:active {
+    transform: scale(0.85);
+}
+
+.it-color-dot.it-dot-active {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(155, 164, 192, 0.28);
+}
+
+/* 自定义颜色选择器 */
+.it-color-custom {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: conic-gradient(hsl(0, 80%, 70%), hsl(45, 80%, 70%), hsl(90, 80%, 70%),
+            hsl(135, 80%, 70%), hsl(180, 80%, 70%), hsl(225, 80%, 70%),
+            hsl(270, 80%, 70%), hsl(315, 80%, 70%), hsl(360, 80%, 70%));
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.14s;
+}
+
+.it-color-custom:active {
+    transform: scale(0.85);
+}
+
+.it-color-custom input[type="color"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.it-color-custom svg {
+    width: 14px;
+    height: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    pointer-events: none;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+/* ---- 实时预览行 ---- */
+.it-label-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0 4px;
+}
+
+.it-preview-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    background: rgba(245, 246, 252, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.it-preview-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--accent);
+}
+
+.it-preview-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+}
+
+/* ====================================================
+   应用到主屏图标的主题类（挂在 #appsGrid 上）
+   ==================================================== */
+
+/* 毛玻璃 */
+#appsGrid.icon-style-frosted .app-icon-inner,
+#dock .dock-icon-inner.icon-style-frosted {
+    background: rgba(255, 255, 255, 0.32) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    border-radius: 16px !important;
+}
+
+/* 透明风 */
+#appsGrid.icon-style-clear .app-icon-inner,
+#dock .dock-icon-inner.icon-style-clear {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.50) !important;
+    border-radius: 16px !important;
+}
+
+/* ins风 */
+#appsGrid.icon-style-ins .app-icon-inner,
+#dock .dock-icon-inner.icon-style-ins {
+    background: rgba(240, 220, 232, 0.72) !important;
+    border: 1.5px solid rgba(210, 170, 190, 0.50) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 2px 10px rgba(200, 140, 170, 0.18) !important;
+}
+
+/* 韩系 */
+#appsGrid.icon-style-korean .app-icon-inner,
+#dock .dock-icon-inner.icon-style-korean {
+    background: rgba(250, 235, 220, 0.80) !important;
+    border: 1.5px solid rgba(210, 175, 155, 0.45) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(200, 160, 130, 0.15) !important;
+}
+
+/* iOS风 */
+#appsGrid.icon-style-ios .app-icon-inner,
+#dock .dock-icon-inner.icon-style-ios {
+    background: linear-gradient(145deg, rgba(140, 180, 230, 0.75), rgba(100, 150, 215, 0.65)) !important;
+    border: none !important;
+    border-radius: 20px !important;
+    box-shadow: 0 3px 12px rgba(80, 120, 200, 0.22) !important;
+}
+
+/* 暗黑 */
+#appsGrid.icon-style-dark .app-icon-inner,
+#dock .dock-icon-inner.icon-style-dark {
+    background: rgba(30, 30, 46, 0.88) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 16px !important;
+}
+
+/* 奶油 */
+#appsGrid.icon-style-cream .app-icon-inner,
+#dock .dock-icon-inner.icon-style-cream {
+    background: rgba(250, 238, 218, 0.85) !important;
+    border: 1.5px solid rgba(205, 175, 140, 0.40) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 8px rgba(190, 155, 115, 0.14) !important;
+}
+
+/* 图标文字颜色（动态通过 CSS 变量控制）*/
+#appsGrid .app-label,
+.dock .dock-label {
+    color: var(--icon-label-color, #3a3a4a);
+    transition: color 0.25s;
+}
+
+/* 自定义图片图标：隐藏原本的 SVG */
+.it-slot-icon.it-slot-custom svg {
+    opacity: 0;
+}

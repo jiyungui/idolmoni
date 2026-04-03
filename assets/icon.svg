@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+
+  <!-- 背景圆角方块，ins 风粉紫渐变 -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#e8d5f5"/>
+      <stop offset="50%"  stop-color="#d5e4f5"/>
+      <stop offset="100%" stop-color="#f5dde8"/>
+    </linearGradient>
+    <!-- 微光内阴影用于质感 -->
+    <filter id="soft">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- 背景板 -->
+  <rect width="512" height="512" rx="112" ry="112" fill="url(#bg)"/>
+
+  <!-- 装饰：背景细线网格（ins 感） -->
+  <g stroke="rgba(155,164,192,0.18)" stroke-width="1.5" fill="none">
+    <line x1="0"   y1="128" x2="512" y2="128"/>
+    <line x1="0"   y1="256" x2="512" y2="256"/>
+    <line x1="0"   y1="384" x2="512" y2="384"/>
+    <line x1="128" y1="0"   x2="128" y2="512"/>
+    <line x1="256" y1="0"   x2="256" y2="512"/>
+    <line x1="384" y1="0"   x2="384" y2="512"/>
+  </g>
+
+  <!-- ====================================
+       火柴人主体  (韩系 ins 细线条风格)
+       中心 X=256  站立基线 Y≈400
+       ==================================== -->
+  <g stroke="#6b75a0" stroke-linecap="round" stroke-linejoin="round" fill="none">
+
+    <!-- 头部 圆形 -->
+    <circle cx="256" cy="148" r="38" stroke-width="12"/>
+
+    <!-- 身体 竖线 -->
+    <line x1="256" y1="186" x2="256" y2="310" stroke-width="12"/>
+
+    <!-- 左腿 向左斜下 -->
+    <line x1="256" y1="310" x2="210" y2="400" stroke-width="12"/>
+    <!-- 右腿 向右斜下 -->
+    <line x1="256" y1="310" x2="302" y2="400" stroke-width="12"/>
+
+    <!-- 左臂 向左斜上伸展（跳舞感） -->
+    <line x1="256" y1="220" x2="176" y2="178" stroke-width="12"/>
+    <!-- 右臂 持麦克风伸出（右前方） -->
+    <line x1="256" y1="220" x2="334" y2="254" stroke-width="12"/>
+
+    <!-- ====================================
+         麦克风（右手处）
+         细节：握柄 + 圆头
+         ==================================== -->
+    <!-- 麦克风握柄 -->
+    <line x1="334" y1="254" x2="368" y2="300" stroke-width="10"/>
+    <!-- 麦克风圆头 -->
+    <circle cx="377" cy="313" r="22" stroke-width="10"/>
+    <!-- 麦克风内横纹（装饰） -->
+    <line x1="358" y1="310" x2="396" y2="310" stroke-width="5" stroke="rgba(107,117,160,0.45)"/>
+    <line x1="356" y1="320" x2="398" y2="320" stroke-width="5" stroke="rgba(107,117,160,0.45)"/>
+
+    <!-- ====================================
+         音符装饰（左上角飘散感）
+         ==================================== -->
+    <!-- 音符 ♪ 右上 -->
+    <g stroke="#a89ec9" stroke-width="7" opacity="0.75">
+      <line x1="152" y1="130" x2="152" y2="108"/>
+      <line x1="152" y1="130" x2="166" y2="135"/>
+      <circle cx="145" cy="134" r="9" fill="#a89ec9" stroke="none" opacity="0.6"/>
+    </g>
+
+    <!-- 音符 ♪ 左上更高 -->
+    <g stroke="#c4aedd" stroke-width="6" opacity="0.55">
+      <line x1="118" y1="95" x2="118" y2="76"/>
+      <line x1="118" y1="95" x2="130" y2="100"/>
+      <circle cx="112" cy="99" r="7" fill="#c4aedd" stroke="none" opacity="0.5"/>
+    </g>
+
+    <!-- 音符 ♪ 右 -->
+    <g stroke="#a89ec9" stroke-width="6" opacity="0.55">
+      <line x1="408" y1="160" x2="408" y2="140"/>
+      <line x1="408" y1="160" x2="420" y2="165"/>
+      <circle cx="402" cy="164" r="7" fill="#a89ec9" stroke="none" opacity="0.5"/>
+    </g>
+
+    <!-- 小星星装饰 ✦ -->
+    <g stroke="#c9b8e0" stroke-width="5" opacity="0.5">
+      <line x1="430" y1="108" x2="430" y2="92"/>
+      <line x1="422" y1="100" x2="438" y2="100"/>
+    </g>
+    <g stroke="#b8cce0" stroke-width="5" opacity="0.4">
+      <line x1="90"  y1="200" x2="90"  y2="186"/>
+      <line x1="83"  y1="193" x2="97"  y2="193"/>
+    </g>
+
+  </g>
+
+  <!-- 脚下装饰横线（地面感） -->
+  <line x1="170" y1="412" x2="342" y2="412"
+        stroke="rgba(107,117,160,0.22)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- 底部品牌文字 -->
+  <text x="256" y="470"
+        font-family="'PingFang SC','Helvetica Neue',sans-serif"
+        font-size="42" font-weight="700"
+        fill="rgba(107,117,160,0.70)"
+        text-anchor="middle"
+        letter-spacing="6">社畜机</text>
+
+</svg>
