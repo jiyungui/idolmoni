@@ -65,13 +65,9 @@ const SettingsPage = (() => {
         ScreenSettings.open();
     }
 
-    /* 壁纸更换 */
+    /* 壁纸更换 —— 改为打开内置页面 */
     function openWallpaper() {
-        Storage.pickImage(b64 => {
-            _applyWallpaper(b64);
-            Storage.set('wallpaper', b64);
-            _toast('壁纸已更换');
-        });
+        WallpaperSettings.open();
     }
 
     /* 应用图标主题（占位） */
@@ -225,17 +221,14 @@ const SettingsPage = (() => {
         }, 2200);
     }
 
-    /* 初始化：恢复壁纸 + 字体 */
+    /* 初始化：恢复字体（壁纸/天气由 WallpaperSettings.init() 接管，不在此处理）*/
     function init() {
-        // 恢复壁纸
-        const wp = Storage.get('wallpaper');
-        if (wp) _applyWallpaper(wp);
-
         // 恢复字体
         const fontId = Storage.get('fontId');
         if (fontId && fontId !== 'default') {
             _applyFont(fontId);
         }
+        // 注意：壁纸恢复由 settings-wallpaper.js 的 DOMContentLoaded 处理
     }
 
     document.addEventListener('DOMContentLoaded', init);

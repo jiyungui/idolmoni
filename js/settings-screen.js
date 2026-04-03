@@ -36,8 +36,7 @@ const ScreenSettings = (() => {
         offsetY: 0,
         scale: 100,
         hideStatus: false,
-        statusColor: 'dark',
-        themeColor: '#e8eaf0'
+        statusColor: 'dark'
     };
 
     /* 工作状态（运行时） */
@@ -133,20 +132,6 @@ const ScreenSettings = (() => {
         });
     }
 
-    /* ---- 系统 theme-color ---- */
-    function setThemeColor(hex) {
-        _state.themeColor = hex;
-        _applyThemeColor(hex);
-        _saveState();
-        // 更新色块选中
-        document.querySelectorAll('.sc-swatch').forEach(el => {
-            el.classList.toggle('sc-swatch-active', el.dataset.color === hex);
-        });
-        // 同步拾色器
-        const picker = document.getElementById('scThemeColorPicker');
-        if (picker) picker.value = hex;
-    }
-
     /* ---- 重置全部 ---- */
     function resetAll() {
         if (!confirm('重置所有屏幕调整设置？')) return;
@@ -216,26 +201,12 @@ const ScreenSettings = (() => {
         }
     }
 
-    /* 更新 meta theme-color（影响浏览器/PWA 系统状态栏） */
-    function _applyThemeColor(hex) {
-        let meta = document.querySelector('meta[name="theme-color"]');
-        if (!meta) {
-            meta = document.createElement('meta');
-            meta.name = 'theme-color';
-            document.head.appendChild(meta);
-        }
-        meta.content = hex;
-        // 同时改变 body 背景（手机全屏时背景露出）
-        document.body.style.background = hex;
-    }
-
     /* 一次性应用所有设置 */
     function _applyAll() {
         _applyFilter();
         _applyTransform();
         _applyStatusBar();
         _applyStatusColor();
-        _applyThemeColor(_state.themeColor);
 
         // 更新预设选中
         document.querySelectorAll('.sc-preset-card').forEach(el => {
@@ -248,10 +219,6 @@ const ScreenSettings = (() => {
         document.querySelectorAll('.sc-color-pill').forEach(el => {
             el.classList.toggle('sc-pill-active', el.dataset.color === _state.statusColor);
         });
-        // 更新色块
-        document.querySelectorAll('.sc-swatch').forEach(el => {
-            el.classList.toggle('sc-swatch-active', el.dataset.color === _state.themeColor);
-        });
     }
 
     /* ================================================================
@@ -262,7 +229,7 @@ const ScreenSettings = (() => {
     function _syncFormFromState() {
         const { brightness, contrast, saturate, hue, blur,
             offsetX, offsetY, scale,
-            hideStatus, statusColor, themeColor } = _state;
+            hideStatus, statusColor } = _state;
 
         _setSlider('scBrightness', brightness);
         _setSlider('scContrast', contrast);
@@ -289,15 +256,6 @@ const ScreenSettings = (() => {
         document.querySelectorAll('.sc-color-pill').forEach(el => {
             el.classList.toggle('sc-pill-active', el.dataset.color === statusColor);
         });
-
-        // 色块
-        document.querySelectorAll('.sc-swatch').forEach(el => {
-            el.classList.toggle('sc-swatch-active', el.dataset.color === themeColor);
-        });
-
-        // 拾色器
-        const picker = document.getElementById('scThemeColorPicker');
-        if (picker) picker.value = themeColor;
     }
 
     function _setSlider(id, val) {
@@ -363,7 +321,6 @@ const ScreenSettings = (() => {
         nudge, resetOffset,
         toggleStatusBar,
         setStatusColor,
-        setThemeColor,
         resetAll
     };
 })();

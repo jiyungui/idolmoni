@@ -1,0 +1,435 @@
+/* ================================================
+   settings-wallpaper.css
+   壁纸设置页 + 天气效果层 样式
+   韩式 ins 线条风
+   ================================================ */
+
+/* ====================================================
+   天气 Canvas — 始终覆盖整个 phone-screen
+   ==================================================== */
+#weatherCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    /* 在壁纸之上、内容之下 */
+    display: block;
+}
+
+/* ====================================================
+   壁纸页通用
+   ==================================================== */
+.wp-reset-btn {
+    font-size: 11px;
+    font-weight: 600;
+    color: #c06060;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(200, 120, 110, 0.3);
+    background: rgba(220, 150, 140, 0.1);
+    transition: background 0.15s;
+}
+
+.wp-reset-btn:active {
+    background: rgba(220, 150, 140, 0.28);
+}
+
+.wp-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 0 4px;
+    margin: 20px 0 8px;
+}
+
+.wp-section-label:first-child {
+    margin-top: 4px;
+}
+
+/* 通用卡片 */
+.wp-card {
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* ====================================================
+   壁纸预览区
+   ==================================================== */
+.wp-preview-section {
+    margin: 0 -4px 4px;
+}
+
+.wp-preview-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9/16;
+    max-height: 220px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+    background: #e8eaf0;
+    box-shadow: var(--shadow-card);
+}
+
+/* 壁纸图片本体 */
+.wp-preview-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    /* 默认隐藏，有图才显示 */
+    transition: opacity 0.3s;
+}
+
+.wp-preview-img.loaded {
+    display: block;
+}
+
+/* 暗化遮罩 */
+.wp-preview-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    pointer-events: none;
+    transition: background 0.2s;
+}
+
+/* 毛玻璃/模糊层 */
+.wp-preview-blur {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transition: backdrop-filter 0.2s, background 0.2s;
+}
+
+/* 占位提示 */
+.wp-preview-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-muted);
+}
+
+.wp-preview-placeholder.hidden {
+    display: none;
+}
+
+.wp-preview-placeholder svg {
+    width: 44px;
+    height: 44px;
+    opacity: 0.4;
+}
+
+.wp-preview-placeholder span {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+}
+
+/* ====================================================
+   上传按钮
+   ==================================================== */
+.wp-upload-btn {
+    width: 100%;
+    height: 48px;
+    border-radius: 24px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    transition: transform 0.14s, opacity 0.14s;
+}
+
+.wp-upload-btn:active {
+    transform: scale(0.96);
+    opacity: 0.85;
+}
+
+.wp-upload-btn svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.wp-tip {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* ====================================================
+   样式调节行
+   ==================================================== */
+.wp-style-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wp-style-row--chips {
+    flex-wrap: wrap;
+}
+
+.wp-style-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    width: 58px;
+}
+
+.wp-style-label svg {
+    width: 14px;
+    height: 14px;
+    color: var(--accent);
+}
+
+.wp-slider-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wp-slider {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--accent-light);
+    border-radius: 2px;
+    outline: none;
+}
+
+.wp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2.5px solid #fff;
+    box-shadow: 0 1px 6px rgba(155, 164, 192, 0.35);
+    cursor: pointer;
+}
+
+.wp-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2.5px solid #fff;
+    cursor: pointer;
+}
+
+.wp-slider-val {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 34px;
+    text-align: right;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+}
+
+/* 填充方式胶囊 */
+.wp-chips {
+    display: flex;
+    gap: 6px;
+}
+
+.wp-chip {
+    padding: 5px 14px;
+    border-radius: 16px;
+    border: 1.5px solid var(--accent-light);
+    background: rgba(245, 246, 252, 0.8);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: inherit;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.wp-chip.wp-chip-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.wp-chip:active {
+    transform: scale(0.93);
+}
+
+/* ====================================================
+   应用按钮
+   ==================================================== */
+.wp-apply-wrap {
+    padding: 4px 0 0;
+}
+
+.wp-apply-btn {
+    width: 100%;
+    height: 50px;
+    border-radius: 25px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    box-shadow: 0 4px 16px rgba(155, 164, 192, 0.35);
+    transition: transform 0.14s, opacity 0.14s, box-shadow 0.15s;
+}
+
+.wp-apply-btn:active {
+    transform: scale(0.96);
+    opacity: 0.88;
+    box-shadow: 0 2px 8px rgba(155, 164, 192, 0.2);
+}
+
+.wp-apply-btn svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+/* ====================================================
+   天气动效预设卡
+   ==================================================== */
+.wp-weather-presets {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 2px 8px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+}
+
+.wp-weather-presets::-webkit-scrollbar {
+    display: none;
+}
+
+.wp-weather-card {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    scroll-snap-align: start;
+}
+
+.wp-weather-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.18s, transform 0.14s, box-shadow 0.18s;
+}
+
+.wp-weather-card.wp-weather-active .wp-weather-icon {
+    border-color: var(--accent);
+    transform: scale(1.06);
+    box-shadow: 0 4px 14px rgba(155, 164, 192, 0.3);
+}
+
+.wp-weather-card:active .wp-weather-icon {
+    transform: scale(0.93);
+}
+
+.wp-weather-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--accent);
+    display: block;
+}
+
+/* 各天气背景色调 */
+.wp-weather-icon--none {
+    background: linear-gradient(135deg, #fff8e8, #ffeaa0);
+}
+
+.wp-weather-icon--rain {
+    background: linear-gradient(135deg, #d0e8f8, #a8c8e8);
+}
+
+.wp-weather-icon--heavyrain {
+    background: linear-gradient(135deg, #a8c0d8, #7898b8);
+    color: #fff;
+}
+
+.wp-weather-icon--snow {
+    background: linear-gradient(135deg, #eaf4ff, #c8e4f8);
+}
+
+.wp-weather-icon--fog {
+    background: linear-gradient(135deg, #e8e8e8, #c8c8c8);
+}
+
+.wp-weather-icon--sakura {
+    background: linear-gradient(135deg, #fde8f0, #f8c8d8);
+}
+
+.wp-weather-icon--stars {
+    background: linear-gradient(135deg, #1a1a38, #2a2850);
+    color: #a8b0e8;
+}
+
+.wp-weather-icon--leaves {
+    background: linear-gradient(135deg, #e8f0d0, #c8d8a0);
+}
+
+.wp-weather-card span {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+}
+
+.wp-weather-card.wp-weather-active span {
+    color: var(--accent);
+}

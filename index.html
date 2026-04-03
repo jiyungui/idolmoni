@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="css/settings.css" />
     <link rel="stylesheet" href="css/settings-api.css" />
     <link rel="stylesheet" href="css/settings-screen.css" />
+    <link rel="stylesheet" href="css/settings-wallpaper.css" />
 
 </head>
 
@@ -905,57 +906,563 @@
                                     onclick="ScreenSettings.setStatusColor('light')" title="浅色文字"></button>
                             </div>
                         </div>
-                        <!-- 自定义背景色 -->
-                        <div class="sc-card-divider"></div>
-                        <div class="sc-color-row" style="align-items:flex-start;flex-direction:column;gap:10px">
-                            <div class="sc-toggle-info">
-                                <span class="sc-toggle-name">系统状态栏背景色</span>
-                                <span class="sc-toggle-desc">通过 meta theme-color 影响浏览器/PWA 系统状态栏</span>
-                            </div>
-                            <div class="sc-theme-color-row">
-                                <!-- 预设色块 -->
-                                <div class="sc-theme-swatches" id="scThemeSwatches">
-                                    <button class="sc-swatch sc-swatch-active" data-color="#e8eaf0"
-                                        style="background:#e8eaf0"
-                                        onclick="ScreenSettings.setThemeColor('#e8eaf0')"></button>
-                                    <button class="sc-swatch" data-color="#ffffff"
-                                        style="background:#ffffff;border:1px solid #ddd"
-                                        onclick="ScreenSettings.setThemeColor('#ffffff')"></button>
-                                    <button class="sc-swatch" data-color="#1a1a22" style="background:#1a1a22"
-                                        onclick="ScreenSettings.setThemeColor('#1a1a22')"></button>
-                                    <button class="sc-swatch" data-color="#f5e6d3" style="background:#f5e6d3"
-                                        onclick="ScreenSettings.setThemeColor('#f5e6d3')"></button>
-                                    <button class="sc-swatch" data-color="#d4e8f0" style="background:#d4e8f0"
-                                        onclick="ScreenSettings.setThemeColor('#d4e8f0')"></button>
-                                    <button class="sc-swatch" data-color="#e8f0d4" style="background:#e8f0d4"
-                                        onclick="ScreenSettings.setThemeColor('#e8f0d4')"></button>
-                                    <button class="sc-swatch" data-color="#f0d4e8" style="background:#f0d4e8"
-                                        onclick="ScreenSettings.setThemeColor('#f0d4e8')"></button>
-                                    <button class="sc-swatch" data-color="#2a3550" style="background:#2a3550"
-                                        onclick="ScreenSettings.setThemeColor('#2a3550')"></button>
-                                </div>
-                                <!-- 自定义色彩选择器 -->
-                                <div class="sc-custom-color-wrap">
-                                    <input type="color" class="sc-color-picker" id="scThemeColorPicker" value="#e8eaf0"
-                                        oninput="ScreenSettings.setThemeColor(this.value)" />
-                                    <label for="scThemeColorPicker" class="sc-color-picker-label">
-                                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
-                                            <path d="M3 17l4-4L14 6l3 3-7 7-4 0z" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                            <path d="M13 5l2 2" stroke-linecap="round" />
-                                            <circle cx="16.5" cy="16.5" r="2" fill="currentColor" opacity=".3" />
-                                        </svg>
-                                        自定义
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div style="height: 40px"></div>
                 </div>
             </div>
             <!-- ====== 屏幕调整页层 end ====== -->
+
+            <!-- ====== 天气效果层（Canvas，始终挂载）====== -->
+            <canvas id="weatherCanvas" aria-hidden="true"></canvas>
+            <!-- ====== 天气效果层 end ====== -->
+
+            <!-- ====== 壁纸设置页层 ====== -->
+            <div class="app-page" id="pageWallpaper">
+                <div class="ap-statusbar">
+                    <button class="ap-back" onclick="WallpaperSettings.close()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                            stroke-linecap="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+                    <span class="ap-title">壁纸更换</span>
+                    <button class="wp-reset-btn" onclick="WallpaperSettings.resetWallpaper()">清除</button>
+                </div>
+                <div class="ap-scroll" id="wallpaperScroll">
+
+                    <!-- ① 壁纸预览 -->
+                    <div class="wp-preview-section">
+                        <div class="wp-preview-frame" id="wpPreviewFrame">
+                            <img class="wp-preview-img" id="wpPreviewImg" src="" alt="" />
+                            <div class="wp-preview-overlay" id="wpPreviewOverlay"></div>
+                            <div class="wp-preview-blur" id="wpPreviewBlurLayer"></div>
+                            <div class="wp-preview-placeholder" id="wpPreviewPlaceholder">
+                                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+                                    <rect x="4" y="8" width="40" height="32" rx="4" />
+                                    <circle cx="17" cy="20" r="4" />
+                                    <path d="M4 36l12-10 8 8 6-5 14 11" />
+                                </svg>
+                                <span>点击下方按钮选择壁纸</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ② 上传按钮 -->
+                    <div class="wp-section-label">壁纸来源</div>
+                    <div class="wp-card">
+                        <button class="wp-upload-btn" onclick="WallpaperSettings.pickImage()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                                <polyline points="17 8 12 3 7 8" />
+                                <line x1="12" y1="3" x2="12" y2="15" />
+                            </svg>
+                            从相册选择图片
+                        </button>
+                        <p class="wp-tip">支持 JPG / PNG / WEBP，原图存储不压缩画质</p>
+                    </div>
+
+                    <!-- ③ 壁纸样式调整 -->
+                    <div class="wp-section-label">壁纸样式</div>
+                    <div class="wp-card wp-style-card">
+                        <!-- 不透明度 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">
+                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                                    <circle cx="10" cy="10" r="7" />
+                                    <path d="M10 3v14" stroke-linecap="round" opacity=".4" />
+                                    <path d="M10 10a7 7 0 010-7v7z" fill="currentColor" opacity=".2" />
+                                </svg>
+                                不透明度
+                            </span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpOpacity" type="range" min="10" max="100" step="1"
+                                    value="100" oninput="WallpaperSettings.onStyleSlider()" />
+                                <span class="wp-slider-val" id="wpOpacityVal">100%</span>
+                            </div>
+                        </div>
+                        <!-- 模糊 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">
+                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                                    <path d="M3 10c0-3.9 3.1-7 7-7s7 3.1 7 7-3.1 7-7 7-7-3.1-7-7z" />
+                                    <circle cx="10" cy="10" r="2.5" fill="currentColor" opacity=".3" />
+                                </svg>
+                                模糊
+                            </span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpBlur" type="range" min="0" max="20" step="0.5" value="0"
+                                    oninput="WallpaperSettings.onStyleSlider()" />
+                                <span class="wp-slider-val" id="wpBlurVal">0</span>
+                            </div>
+                        </div>
+                        <!-- 毛玻璃 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">
+                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                                    <rect x="2" y="2" width="16" height="16" rx="4" />
+                                    <path d="M6 6l8 8M14 6l-8 8" stroke-linecap="round" opacity=".4" />
+                                </svg>
+                                毛玻璃
+                            </span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpFrost" type="range" min="0" max="100" step="1" value="0"
+                                    oninput="WallpaperSettings.onStyleSlider()" />
+                                <span class="wp-slider-val" id="wpFrostVal">0%</span>
+                            </div>
+                        </div>
+                        <!-- 暗化遮罩 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">
+                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                                    <path d="M10 3a7 7 0 000 14A7 7 0 0010 3z" fill="currentColor" opacity=".18" />
+                                    <path d="M10 3a7 7 0 000 14" stroke-linecap="round" />
+                                </svg>
+                                暗化
+                            </span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpDim" type="range" min="0" max="80" step="1" value="0"
+                                    oninput="WallpaperSettings.onStyleSlider()" />
+                                <span class="wp-slider-val" id="wpDimVal">0%</span>
+                            </div>
+                        </div>
+                        <!-- 填充方式 -->
+                        <div class="wp-style-row wp-style-row--chips">
+                            <span class="wp-style-label" style="width:auto;margin-right:8px">填充</span>
+                            <div class="wp-chips" id="wpFitChips">
+                                <button class="wp-chip wp-chip-active" data-fit="cover"
+                                    onclick="WallpaperSettings.setFit('cover')">铺满</button>
+                                <button class="wp-chip" data-fit="contain"
+                                    onclick="WallpaperSettings.setFit('contain')">适应</button>
+                                <button class="wp-chip" data-fit="center"
+                                    onclick="WallpaperSettings.setFit('center')">居中</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ④ 应用按钮 -->
+                    <div class="wp-apply-wrap">
+                        <button class="wp-apply-btn" onclick="WallpaperSettings.applyWallpaper()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            应用壁纸
+                        </button>
+                    </div>
+
+                    <!-- ⑤ 天气动效 -->
+                    <div class="wp-section-label">主屏天气动效</div>
+                    <div class="wp-card">
+                        <div class="wp-weather-presets" id="wpWeatherPresets">
+                            <div class="wp-weather-card wp-weather-active" data-weather="none"
+                                onclick="WallpaperSettings.setWeather('none')">
+                                <div class="wp-weather-icon wp-weather-icon--none">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <circle cx="16" cy="16" r="6" />
+                                        <path
+                                            d="M16 4v3M16 25v3M4 16h3M25 16h3M7.5 7.5l2 2M22.5 22.5l2 2M22.5 7.5l-2 2M7.5 22.5l2-2"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>晴天</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="rain"
+                                onclick="WallpaperSettings.setWeather('rain')">
+                                <div class="wp-weather-icon wp-weather-icon--rain">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <path d="M8 20a6 6 0 010-12c.3-3.3 3-6 6.5-6a7 7 0 016.8 5.3A5 5 0 0126 17H8z"
+                                            stroke-linecap="round" />
+                                        <line x1="10" y1="24" x2="8" y2="28" stroke-linecap="round" />
+                                        <line x1="16" y1="24" x2="14" y2="28" stroke-linecap="round" />
+                                        <line x1="22" y1="24" x2="20" y2="28" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>小雨</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="heavyrain"
+                                onclick="WallpaperSettings.setWeather('heavyrain')">
+                                <div class="wp-weather-icon wp-weather-icon--heavyrain">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <path d="M8 20a6 6 0 010-12c.3-3.3 3-6 6.5-6a7 7 0 016.8 5.3A5 5 0 0126 17H8z"
+                                            stroke-linecap="round" />
+                                        <line x1="9" y1="23" x2="7" y2="29" stroke-linecap="round" stroke-width="1.8" />
+                                        <line x1="15" y1="23" x2="13" y2="29" stroke-linecap="round"
+                                            stroke-width="1.8" />
+                                        <line x1="21" y1="23" x2="19" y2="29" stroke-linecap="round"
+                                            stroke-width="1.8" />
+                                        <line x1="12" y1="26" x2="10" y2="30" stroke-linecap="round" />
+                                        <line x1="18" y1="26" x2="16" y2="30" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>大雨</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="snow"
+                                onclick="WallpaperSettings.setWeather('snow')">
+                                <div class="wp-weather-icon wp-weather-icon--snow">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <path d="M8 19a6 6 0 010-12c.3-3.3 3-6 6.5-6a7 7 0 016.8 5.3A5 5 0 0126 16H8z"
+                                            stroke-linecap="round" />
+                                        <line x1="10" y1="24" x2="10" y2="30" stroke-linecap="round" />
+                                        <line x1="7" y1="27" x2="13" y2="27" stroke-linecap="round" />
+                                        <line x1="8" y1="25" x2="12" y2="29" stroke-linecap="round" />
+                                        <line x1="12" y1="25" x2="8" y2="29" stroke-linecap="round" />
+                                        <line x1="20" y1="23" x2="20" y2="29" stroke-linecap="round" />
+                                        <line x1="17" y1="26" x2="23" y2="26" stroke-linecap="round" />
+                                        <line x1="18" y1="24" x2="22" y2="28" stroke-linecap="round" />
+                                        <line x1="22" y1="24" x2="18" y2="28" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>下雪</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="fog"
+                                onclick="WallpaperSettings.setWeather('fog')">
+                                <div class="wp-weather-icon wp-weather-icon--fog">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <line x1="4" y1="12" x2="28" y2="12" stroke-linecap="round" />
+                                        <line x1="6" y1="17" x2="26" y2="17" stroke-linecap="round" opacity=".7" />
+                                        <line x1="8" y1="22" x2="24" y2="22" stroke-linecap="round" opacity=".4" />
+                                    </svg>
+                                </div>
+                                <span>雾</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="sakura"
+                                onclick="WallpaperSettings.setWeather('sakura')">
+                                <div class="wp-weather-icon wp-weather-icon--sakura">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                                        <path
+                                            d="M16 8 C18 4 22 5 21 9 C25 7 27 11 24 13 C27 15 25 19 22 18 C22 22 18 23 16 20 C14 23 10 22 10 18 C7 19 5 15 8 13 C5 11 7 7 11 9 C10 5 14 4 16 8Z" />
+                                        <circle cx="16" cy="14" r="2" fill="currentColor" opacity=".3" />
+                                    </svg>
+                                </div>
+                                <span>樱花</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="stars"
+                                onclick="WallpaperSettings.setWeather('stars')">
+                                <div class="wp-weather-icon wp-weather-icon--stars">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                                        <path d="M16 5l2.5 5 5.5.8-4 3.9.9 5.5L16 17.5l-4.9 2.7.9-5.5L8 10.8l5.5-.8z" />
+                                        <circle cx="6" cy="8" r="1.2" fill="currentColor" />
+                                        <circle cx="26" cy="8" r="1" fill="currentColor" />
+                                        <circle cx="8" cy="24" r="0.8" fill="currentColor" />
+                                        <circle cx="24" cy="26" r="1.2" fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <span>星空</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="leaves"
+                                onclick="WallpaperSettings.setWeather('leaves')">
+                                <div class="wp-weather-icon wp-weather-icon--leaves">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                                        <path d="M6 26 C8 18 14 12 22 8 C20 16 16 22 8 28" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M6 26 C12 22 18 20 24 24" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>落叶</span>
+                            </div>
+                        </div>
+                        <!-- 粒子密度 -->
+                        <div class="wp-style-row" style="margin-top:12px">
+                            <span class="wp-style-label">密度</span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpWeatherDensity" type="range" min="10" max="120" step="5"
+                                    value="50" oninput="WallpaperSettings.onWeatherDensity()" />
+                                <span class="wp-slider-val" id="wpWeatherDensityVal">50</span>
+                            </div>
+                        </div>
+                        <!-- 速度 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">速度</span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpWeatherSpeed" type="range" min="0.3" max="3" step="0.1"
+                                    value="1" oninput="WallpaperSettings.onWeatherSpeed()" />
+                                <span class="wp-slider-val" id="wpWeatherSpeedVal">1.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="height:40px"></div>
+                </div>
+            </div>
+            <!-- ====== 壁纸设置页层 end ====== -->
+
+            <!-- ====== 天气效果层（Canvas，始终挂载）====== -->
+            <canvas id="weatherCanvas" aria-hidden="true"></canvas>
+            <!-- ====== 天气效果层 end ====== -->
+
+            <!-- ====== 壁纸设置页层 ====== -->
+            <div class="app-page" id="pageWallpaper">
+                <div class="ap-statusbar">
+                    <button class="ap-back" onclick="WallpaperSettings.close()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                            stroke-linecap="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+                    <span class="ap-title">壁纸更换</span>
+                    <button class="wp-reset-btn" onclick="WallpaperSettings.resetWallpaper()">清除</button>
+                </div>
+                <div class="ap-scroll" id="wallpaperScroll">
+
+                    <!-- ① 壁纸预览 -->
+                    <div class="wp-preview-section">
+                        <div class="wp-preview-frame" id="wpPreviewFrame">
+                            <img class="wp-preview-img" id="wpPreviewImg" src="" alt="" />
+                            <div class="wp-preview-overlay" id="wpPreviewOverlay"></div>
+                            <div class="wp-preview-blur" id="wpPreviewBlurLayer"></div>
+                            <div class="wp-preview-placeholder" id="wpPreviewPlaceholder">
+                                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+                                    <rect x="4" y="8" width="40" height="32" rx="4" />
+                                    <circle cx="17" cy="20" r="4" />
+                                    <path d="M4 36l12-10 8 8 6-5 14 11" />
+                                </svg>
+                                <span>点击下方按钮选择壁纸</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ② 上传按钮 -->
+                    <div class="wp-section-label">壁纸来源</div>
+                    <div class="wp-card">
+                        <button class="wp-upload-btn" onclick="WallpaperSettings.pickImage()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                                <polyline points="17 8 12 3 7 8" />
+                                <line x1="12" y1="3" x2="12" y2="15" />
+                            </svg>
+                            从相册选择图片
+                        </button>
+                        <p class="wp-tip">支持 JPG / PNG / WEBP，原图存储不压缩画质</p>
+                    </div>
+
+                    <!-- ③ 壁纸样式调整 -->
+                    <div class="wp-section-label">壁纸样式</div>
+                    <div class="wp-card wp-style-card">
+                        <!-- 不透明度 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">
+                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                                    <circle cx="10" cy="10" r="7" />
+                                    <path d="M10 3v14" stroke-linecap="round" opacity=".4" />
+                                    <path d="M10 10a7 7 0 010-7v7z" fill="currentColor" opacity=".2" />
+                                </svg>
+                                不透明度
+                            </span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpOpacity" type="range" min="10" max="100" step="1"
+                                    value="100" oninput="WallpaperSettings.onStyleSlider()" />
+                                <span class="wp-slider-val" id="wpOpacityVal">100%</span>
+                            </div>
+                        </div>
+                        <!-- 模糊 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">
+                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                                    <path d="M10 3a7 7 0 110 14A7 7 0 0110 3z" />
+                                    <circle cx="10" cy="10" r="2.5" fill="currentColor" opacity=".3" />
+                                </svg>
+                                模糊
+                            </span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpBlur" type="range" min="0" max="20" step="0.5" value="0"
+                                    oninput="WallpaperSettings.onStyleSlider()" />
+                                <span class="wp-slider-val" id="wpBlurVal">0</span>
+                            </div>
+                        </div>
+                        <!-- 毛玻璃强度（在壁纸上叠加一层磨砂遮罩）-->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">
+                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                                    <rect x="2" y="2" width="16" height="16" rx="4" />
+                                    <path d="M6 6l8 8M14 6l-8 8" stroke-linecap="round" opacity=".4" />
+                                </svg>
+                                毛玻璃
+                            </span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpFrost" type="range" min="0" max="100" step="1" value="0"
+                                    oninput="WallpaperSettings.onStyleSlider()" />
+                                <span class="wp-slider-val" id="wpFrostVal">0%</span>
+                            </div>
+                        </div>
+                        <!-- 暗化遮罩 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">
+                                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4">
+                                    <path d="M10 3a7 7 0 000 14A7 7 0 0110 3z" fill="currentColor" opacity=".18" />
+                                    <path d="M10 3a7 7 0 000 14" stroke-linecap="round" />
+                                </svg>
+                                暗化
+                            </span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpDim" type="range" min="0" max="80" step="1" value="0"
+                                    oninput="WallpaperSettings.onStyleSlider()" />
+                                <span class="wp-slider-val" id="wpDimVal">0%</span>
+                            </div>
+                        </div>
+                        <!-- 填充方式 -->
+                        <div class="wp-style-row wp-style-row--chips">
+                            <span class="wp-style-label" style="width:auto;margin-right:8px">填充</span>
+                            <div class="wp-chips" id="wpFitChips">
+                                <button class="wp-chip wp-chip-active" data-fit="cover"
+                                    onclick="WallpaperSettings.setFit('cover')">铺满</button>
+                                <button class="wp-chip" data-fit="contain"
+                                    onclick="WallpaperSettings.setFit('contain')">适应</button>
+                                <button class="wp-chip" data-fit="center"
+                                    onclick="WallpaperSettings.setFit('center')">居中</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ④ 应用按钮 -->
+                    <div class="wp-apply-wrap">
+                        <button class="wp-apply-btn" onclick="WallpaperSettings.applyWallpaper()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            应用壁纸
+                        </button>
+                    </div>
+
+                    <!-- ⑤ 天气动效 -->
+                    <div class="wp-section-label">主屏天气动效</div>
+                    <div class="wp-card">
+                        <!-- 天气预设卡片横向滚动 -->
+                        <div class="wp-weather-presets" id="wpWeatherPresets">
+                            <div class="wp-weather-card wp-weather-active" data-weather="none"
+                                onclick="WallpaperSettings.setWeather('none')">
+                                <div class="wp-weather-icon wp-weather-icon--none">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <circle cx="16" cy="16" r="6" />
+                                        <path
+                                            d="M16 4v3M16 25v3M4 16h3M25 16h3M7.5 7.5l2 2M22.5 22.5l2 2M22.5 7.5l-2 2M7.5 22.5l2-2"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>晴天</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="rain"
+                                onclick="WallpaperSettings.setWeather('rain')">
+                                <div class="wp-weather-icon wp-weather-icon--rain">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <path d="M8 20a6 6 0 010-12c.3-3.3 3-6 6.5-6a7 7 0 016.8 5.3A5 5 0 0126 17H8z"
+                                            stroke-linecap="round" />
+                                        <line x1="10" y1="24" x2="8" y2="28" stroke-linecap="round" />
+                                        <line x1="16" y1="24" x2="14" y2="28" stroke-linecap="round" />
+                                        <line x1="22" y1="24" x2="20" y2="28" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>小雨</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="heavyrain"
+                                onclick="WallpaperSettings.setWeather('heavyrain')">
+                                <div class="wp-weather-icon wp-weather-icon--heavyrain">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <path d="M8 20a6 6 0 010-12c.3-3.3 3-6 6.5-6a7 7 0 016.8 5.3A5 5 0 0126 17H8z"
+                                            stroke-linecap="round" />
+                                        <line x1="9" y1="23" x2="7" y2="29" stroke-linecap="round" stroke-width="1.8" />
+                                        <line x1="15" y1="23" x2="13" y2="29" stroke-linecap="round"
+                                            stroke-width="1.8" />
+                                        <line x1="21" y1="23" x2="19" y2="29" stroke-linecap="round"
+                                            stroke-width="1.8" />
+                                        <line x1="12" y1="26" x2="10" y2="30" stroke-linecap="round" />
+                                        <line x1="18" y1="26" x2="16" y2="30" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>大雨</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="snow"
+                                onclick="WallpaperSettings.setWeather('snow')">
+                                <div class="wp-weather-icon wp-weather-icon--snow">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <path d="M8 19a6 6 0 010-12c.3-3.3 3-6 6.5-6a7 7 0 016.8 5.3A5 5 0 0126 16H8z"
+                                            stroke-linecap="round" />
+                                        <line x1="10" y1="24" x2="10" y2="30" stroke-linecap="round" />
+                                        <line x1="7" y1="27" x2="13" y2="27" stroke-linecap="round" />
+                                        <line x1="8" y1="25" x2="12" y2="29" stroke-linecap="round" />
+                                        <line x1="12" y1="25" x2="8" y2="29" stroke-linecap="round" />
+                                        <line x1="20" y1="23" x2="20" y2="29" stroke-linecap="round" />
+                                        <line x1="17" y1="26" x2="23" y2="26" stroke-linecap="round" />
+                                        <line x1="18" y1="24" x2="22" y2="28" stroke-linecap="round" />
+                                        <line x1="22" y1="24" x2="18" y2="28" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>下雪</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="fog"
+                                onclick="WallpaperSettings.setWeather('fog')">
+                                <div class="wp-weather-icon wp-weather-icon--fog">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4">
+                                        <line x1="4" y1="12" x2="28" y2="12" stroke-linecap="round" />
+                                        <line x1="6" y1="17" x2="26" y2="17" stroke-linecap="round" opacity=".7" />
+                                        <line x1="8" y1="22" x2="24" y2="22" stroke-linecap="round" opacity=".4" />
+                                    </svg>
+                                </div>
+                                <span>雾</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="sakura"
+                                onclick="WallpaperSettings.setWeather('sakura')">
+                                <div class="wp-weather-icon wp-weather-icon--sakura">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                                        <path
+                                            d="M16 8 C18 4 22 5 21 9 C25 7 27 11 24 13 C27 15 25 19 22 18 C22 22 18 23 16 20 C14 23 10 22 10 18 C7 19 5 15 8 13 C5 11 7 7 11 9 C10 5 14 4 16 8Z" />
+                                        <circle cx="16" cy="14" r="2" fill="currentColor" opacity=".3" />
+                                    </svg>
+                                </div>
+                                <span>樱花</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="stars"
+                                onclick="WallpaperSettings.setWeather('stars')">
+                                <div class="wp-weather-icon wp-weather-icon--stars">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                                        <path d="M16 5l2.5 5 5.5.8-4 3.9.9 5.5L16 17.5l-4.9 2.7.9-5.5L8 10.8l5.5-.8z" />
+                                        <circle cx="6" cy="8" r="1.2" fill="currentColor" />
+                                        <circle cx="26" cy="8" r="1" fill="currentColor" />
+                                        <circle cx="8" cy="24" r="0.8" fill="currentColor" />
+                                        <circle cx="24" cy="26" r="1.2" fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <span>星空</span>
+                            </div>
+                            <div class="wp-weather-card" data-weather="leaves"
+                                onclick="WallpaperSettings.setWeather('leaves')">
+                                <div class="wp-weather-icon wp-weather-icon--leaves">
+                                    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3">
+                                        <path d="M6 26 C8 18 14 12 22 8 C20 16 16 22 8 28" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M6 26 C12 22 18 20 24 24" stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <span>落叶</span>
+                            </div>
+                        </div>
+                        <!-- 粒子密度 -->
+                        <div class="wp-style-row" style="margin-top:12px">
+                            <span class="wp-style-label">密度</span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpWeatherDensity" type="range" min="10" max="120" step="5"
+                                    value="50" oninput="WallpaperSettings.onWeatherDensity()" />
+                                <span class="wp-slider-val" id="wpWeatherDensityVal">50</span>
+                            </div>
+                        </div>
+                        <!-- 速度 -->
+                        <div class="wp-style-row">
+                            <span class="wp-style-label">速度</span>
+                            <div class="wp-slider-wrap">
+                                <input class="wp-slider" id="wpWeatherSpeed" type="range" min="0.3" max="3" step="0.1"
+                                    value="1" oninput="WallpaperSettings.onWeatherSpeed()" />
+                                <span class="wp-slider-val" id="wpWeatherSpeedVal">1.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="height:40px"></div>
+                </div>
+            </div>
+            <!-- ====== 壁纸设置页层 end ====== -->
 
         </div>
         <!-- phone-screen end -->
@@ -999,6 +1506,7 @@
     <script src="js/settings.js"></script>
     <script src="js/settings-api.js"></script>
     <script src="js/settings-screen.js"></script>
+    <script src="js/settings-wallpaper.js"></script>
 
 
     <script>
