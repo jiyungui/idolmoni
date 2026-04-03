@@ -34,7 +34,7 @@ const DataManager = (() => {
             /* 加入元信息 */
             const payload = {
                 _meta: {
-                    app: 'MyPhone',
+                    app: 'idol机',
                     version: '1.0.0',
                     exportAt: new Date().toISOString(),
                     keys: Object.keys(snapshot).length
@@ -53,7 +53,7 @@ const DataManager = (() => {
             const a = document.createElement('a');
             const ts = _formatDateForFilename(new Date());
             a.href = url;
-            a.download = `myphone_backup_${ts}.json`;
+            a.download = `idolji_backup_${ts}.json`;
             a.click();
             URL.revokeObjectURL(url);
 
@@ -87,7 +87,7 @@ const DataManager = (() => {
                 const payload = JSON.parse(e.target.result);
 
                 /* 校验是否为本应用导出文件 */
-                if (!payload._meta || payload._meta.app !== 'MyPhone' || !payload.data) {
+                if (!payload._meta || !['MyPhone', '社畜机', 'idol机'].includes(payload._meta.app) || !payload.data) {
                     _toast('文件格式不正确，请使用本模拟器导出的文件');
                     return;
                 }

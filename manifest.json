@@ -1,6 +1,6 @@
 {
-    "name": "社畜机",
-    "short_name": "社畜机",
+    "name": "idol机",
+    "short_name": "idol机",
     "description": "手机模拟器主屏",
     "start_url": "./index.html",
     "display": "fullscreen",

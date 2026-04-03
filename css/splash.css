@@ -1,0 +1,353 @@
+/* ================================================
+   splash.css — 开屏入场动画
+   ================================================ */
+
+/* ---- 蒙层容器 ---- */
+.splash-screen {
+    position: absolute;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+    border-radius: inherit;
+    overflow: hidden;
+
+    /* 入场：默认可见；退出时由 JS 添加 .splash-hide */
+    opacity: 1;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* 退场动画：向上淡出 */
+.splash-screen.splash-hide {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.97);
+    pointer-events: none;
+}
+
+/* ---- 渐变背景 ---- */
+.splash-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #ede8f8 0%, #ddeaf8 50%, #f8e4ee 100%);
+    z-index: 0;
+}
+
+/* 背景装饰网格 */
+.splash-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(107, 117, 160, .08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(107, 117, 160, .08) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+/* ---- 主体内容 ---- */
+.splash-body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+/* ---- 火柴人 SVG ---- */
+.splash-figure {
+    width: 140px;
+    height: 192px;
+    /* 整体弹入 */
+    animation: splashFigureIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+@keyframes splashFigureIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 音符飘动 */
+.splash-note {
+    animation: splashNoteFloat 2s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.splash-note.n1 {
+    animation-delay: 0s;
+}
+
+.splash-note.n2 {
+    animation-delay: 0.4s;
+}
+
+.splash-note.n3 {
+    animation-delay: 0.8s;
+}
+
+@keyframes splashNoteFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-6px);
+        opacity: 0.6;
+    }
+}
+
+/* ---- 品牌标题 ---- */
+.splash-title {
+    font-family: 'PingFang SC', 'Helvetica Neue', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #5a6190;
+    margin-top: 10px;
+    animation: splashTitleIn 0.7s ease 0.6s both;
+}
+
+@keyframes splashTitleIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---- 副标题 ---- */
+.splash-sub {
+    font-family: 'PingFang SC', 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: rgba(107, 117, 160, 0.7);
+    margin-top: 6px;
+    animation: splashTitleIn 0.7s ease 0.85s both;
+}
+
+/* ---- 底部脉冲圈 ---- */
+.splash-pulse {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 36px;
+    z-index: 2;
+}
+
+.splash-pulse::before,
+.splash-pulse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(107, 117, 160, 0.4);
+    animation: splashPulse 1.8s ease-out infinite;
+}
+
+.splash-pulse::after {
+    animation-delay: 0.9s;
+}
+
+@keyframes splashPulse {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+/* ================================================
+   激活码解锁页样式
+   ================================================ */
+
+/* ---- 解锁容器 ---- */
+.splash-unlock {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 28px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ---- 锁图标 ---- */
+.su-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(107, 117, 160, 0.1);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    animation: splashFigureIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+.su-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* ---- 标题 ---- */
+.su-title {
+    font-family: 'PingFang SC', 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #5a6190;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    animation: splashTitleIn 0.5s ease 0.2s both;
+}
+
+/* ---- 描述 ---- */
+.su-desc {
+    font-family: 'PingFang SC', 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    color: rgba(107, 117, 160, 0.65);
+    letter-spacing: 0.04em;
+    margin-bottom: 24px;
+    animation: splashTitleIn 0.5s ease 0.3s both;
+}
+
+/* ---- 输入框容器 ---- */
+.su-input-wrap {
+    width: 100%;
+    margin-bottom: 6px;
+    animation: splashTitleIn 0.5s ease 0.4s both;
+}
+
+/* ---- 输入框 ---- */
+.su-input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 46px;
+    border: 1.5px solid rgba(107, 117, 160, 0.3);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #4a5280;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(6px);
+}
+
+.su-input::placeholder {
+    color: rgba(107, 117, 160, 0.35);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+}
+
+.su-input:focus {
+    border-color: rgba(107, 117, 160, 0.7);
+    box-shadow: 0 0 0 3px rgba(107, 117, 160, 0.12);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* ---- 错误提示 ---- */
+.su-error {
+    font-size: 11px;
+    color: #e07a7a;
+    height: 16px;
+    margin-bottom: 14px;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.su-error.su-error-show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---- 确认按钮 ---- */
+.su-btn {
+    width: 100%;
+    height: 46px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #7b87c0 0%, #a99ed4 100%);
+    color: #fff;
+    font-family: 'PingFang SC', 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-bottom: 12px;
+    animation: splashTitleIn 0.5s ease 0.5s both;
+}
+
+.su-btn:active {
+    transform: scale(0.97);
+    opacity: 0.85;
+}
+
+.su-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* ---- 底部提示 ---- */
+.su-hint {
+    font-size: 10px;
+    color: rgba(107, 117, 160, 0.45);
+    letter-spacing: 0.04em;
+    animation: splashTitleIn 0.5s ease 0.6s both;
+}
+
+/* ---- 抖动动画 ---- */
+@keyframes suShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-8px);
+    }
+
+    40% {
+        transform: translateX(8px);
+    }
+
+    60% {
+        transform: translateX(-6px);
+    }
+
+    80% {
+        transform: translateX(6px);
+    }
+}
+
+.su-shake {
+    animation: suShake 0.4s ease;
+}
