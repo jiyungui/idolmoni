@@ -1,4 +1,3 @@
-/* ================= 全局重置与白灰基底 ================= */
 * {
   margin: 0;
   padding: 0;
@@ -14,58 +13,63 @@
   --text-main: #2A2A2A;
   --text-muted: #8E8E93;
   --font-serif: "Didot", "Bodoni MT", "Cinzel", "Songti SC", serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
 }
 
 html, body {
   width: 100%;
   height: 100%;
-  height: 100dvh;
   overflow: hidden;
   background-color: var(--bg-main);
   font-family: var(--font-sans);
   color: var(--text-main);
+  /* 解决移动端拖拽回弹造成的底图暴露 */
+  position: fixed;
 }
 
-/* 视口全屏容器：规避移动端视口跳动 */
+/* 核心真全屏容器：彻底贴合物理边界 */
 #phone-container {
-  width: 100%;
-  height: 100%;
-  max-width: 480px; /* 桌面端居中模拟，移动端自然撑满 */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 440px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  position: relative;
   background-color: var(--bg-main);
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* 顶部完全靠齐刘海，底部完全下沉到安全区最底端 */
+  padding-top: max(8px, env(safe-area-inset-top));
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
 }
 
-/* 顶部状态栏 */
+/* 状态栏：精致紧凑，不侵占主屏高比例 */
 .status-bar {
-  height: 38px;
+  height: 28px;
+  min-height: 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 18px;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
 }
 .status-indicators {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 .status-tag {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
-  color: #555555;
+  color: #444;
 }
 .battery-pill {
-  width: 22px;
-  height: 11px;
-  border: 1.2px solid #555555;
+  width: 20px;
+  height: 10px;
+  border: 1px solid #444;
   border-radius: 3px;
   padding: 1px;
   position: relative;
@@ -73,21 +77,21 @@ html, body {
 .battery-pill::after {
   content: "";
   position: absolute;
-  right: -3px;
+  right: -2.5px;
   top: 2px;
-  width: 2px;
-  height: 5px;
-  background-color: #555555;
+  width: 1.5px;
+  height: 4px;
+  background: #444;
   border-radius: 0 1px 1px 0;
 }
 .battery-level {
-  width: 75%;
+  width: 80%;
   height: 100%;
-  background-color: #444444;
+  background: #222;
   border-radius: 1px;
 }
 
-/* 三页滑块结构 */
+/* 页面滑块：采用 Flex 1 自动顶满剩余空间 */
 .screen-viewport {
   flex: 1;
   width: 100%;
@@ -96,42 +100,27 @@ html, body {
 }
 .pages-track {
   display: flex;
-  width: 300%;
+  width: 200%; /* 精准两页 */
   height: 100%;
-  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 .page-screen {
-  width: 33.33333%;
+  width: 50%;
   height: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 8px 16px 12px 16px;
   display: flex;
   flex-direction: column;
-}
-.page-screen::-webkit-scrollbar {
-  display: none;
+  padding: 4px 14px 6px 14px;
 }
 
+/* 内容容器：自动拉开组件与APP间距，严防悬空大块 */
 .page-content {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  flex: 1;
+  justify-content: space-between;
 }
 
-.empty-page-placeholder {
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  font-family: var(--font-serif);
-  letter-spacing: 4px;
-  font-size: 14px;
-  color: var(--text-muted);
-}
-
-/* 指示器 */
+/* 两页指示器 */
 .page-indicator-bar {
   height: 14px;
   display: flex;
@@ -143,11 +132,11 @@ html, body {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: var(--border-soft);
+  background: var(--border-soft);
   transition: all 0.25s ease;
 }
 .page-indicator-bar .dot.active {
-  width: 16px;
-  border-radius: 4px;
-  background-color: #666666;
+  width: 14px;
+  border-radius: 3px;
+  background: #444444;
 }

@@ -6,6 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="声声phone" />
+  <meta name="format-detection" content="telephone=no" />
   <link rel="manifest" href="manifest.json" />
   <title>声声phone</title>
   
@@ -14,63 +15,60 @@
   <link rel="stylesheet" href="css/apps.css" />
 </head>
 <body>
-  <!-- 手机物理边框模拟层/PWA纯净容器 -->
   <div id="phone-container">
     
-    <!-- 顶部状态栏（极简高质感排版，无Emoji） -->
+    <!-- 极简拟真状态栏：贴合 iPhone 刘海/灵动岛 -->
     <header class="status-bar">
       <span class="status-time" id="status-clock">00:00</span>
       <div class="status-indicators">
         <span class="status-tag">5G</span>
-        <div class="battery-pill">
-          <div class="battery-level"></div>
-        </div>
+        <div class="battery-pill"><div class="battery-level"></div></div>
       </div>
     </header>
 
-    <!-- 三页水平滑块视口 -->
+    <!-- 两页滑动视口 -->
     <main class="screen-viewport" id="viewport">
       <div class="pages-track" id="pagesTrack">
         
-        <!-- 第一页 (主页) -->
+        <!-- ================= 第 1 页 ================= -->
         <section class="page-screen" id="page-1">
           <div class="page-content">
             
-            <!-- 顶部小组件 P1 (拍立得/胶片卡片) -->
+            <!-- 顶部小组件 P1 (拍立得长卡) -->
             <div class="widget-p1 widget-box" id="widgetP1">
               <div class="p1-clip">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8">
                   <path d="M6 7.5v8a5 5 0 0 0 10 0V5a3 3 0 0 0-6 0v10.5a1 1 0 0 0 2 0V7.5"/>
                 </svg>
               </div>
               <div class="p1-image-wrap">
                 <img id="p1-img" src="" alt="" class="card-img" />
                 <div class="p1-img-tag" id="p1-tag">It's very close to you</div>
-                <div class="p1-action-dot" id="p1-close-btn">&times;</div>
+                <div class="p1-action-dot" id="p1-random-btn" title="点击换一句">↺</div>
               </div>
               <div class="p1-info">
-                <div class="p1-title" id="p1-title">Inny</div>
+                <div class="p1-title" id="p1-title">Silence & Wind</div>
                 <div class="p1-tags-row">
                   <span>Nearby</span>
-                  <span>Game</span>
-                  <span>Dressing Style</span>
-                  <span>Pet</span>
+                  <span>Aesthetics</span>
+                  <span>Monochrome</span>
+                  <span>Life</span>
                 </div>
                 <div class="p1-desc" id="p1-desc">
-                  A violinist who loves to eat and play, he usually likes to go shopping with friends...
+                  “日光穿过百叶窗的缝隙，时间在此刻凝滞为一首无声的诗。”
                 </div>
               </div>
             </div>
 
-            <!-- 中部左右组件区 (P2 & P3 并排) -->
+            <!-- 中部左右组件区 (P2 & P3) -->
             <div class="widgets-row">
-              <!-- 左侧组件 P2 (日历/生活记事) -->
+              <!-- 左侧 P2 (日历记事) -->
               <div class="widget-p2 widget-box" id="widgetP2">
                 <div class="p2-top-image">
                   <img id="p2-img" src="" alt="" class="card-img" />
                   <div class="p2-img-overlay">
-                    <span class="p2-month" id="p2-month">October</span>
-                    <span class="p2-subtitle" id="p2-sub">My little life.</span>
+                    <span class="p2-month" id="p2-month">November</span>
+                    <span class="p2-subtitle" id="p2-sub">片刻的宁静。</span>
                   </div>
                 </div>
                 <div class="p2-calendar-strip">
@@ -82,24 +80,18 @@
                   </div>
                 </div>
                 <div class="p2-foot-pill">
-                  <div class="p2-avatar" id="p2-avatar-wrap">
-                    <img id="p2-avatar-img" src="" alt="" />
-                  </div>
-                  <div class="p2-date-text" id="p2-date-txt">27/10/2026</div>
+                  <div class="p2-avatar"><img id="p2-avatar-img" src="" alt="" /></div>
+                  <div class="p2-date-text" id="p2-date-txt">“风吹落一页白昼”</div>
                   <div class="p2-more-dots">···</div>
                 </div>
               </div>
 
-              <!-- 右侧组件 P3 (搜索框 + 拍立得日常) -->
+              <!-- 右侧 P3 (搜索栏与日常) -->
               <div class="widget-p3 widget-box" id="widgetP3">
                 <div class="p3-search-bar">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m6 9 6 6 6-6"/>
-                  </svg>
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                   <div class="p3-input-mock">
-                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                     <span>검색</span>
                   </div>
                 </div>
@@ -108,17 +100,17 @@
                     <img id="p3-img" src="" alt="" class="card-img" />
                   </div>
                   <div class="p3-text-area">
-                    <div class="p3-sub-lead" id="p3-head">DAILY MOMENT</div>
-                    <div class="p3-text-line italic" id="p3-t1">yummy</div>
-                    <div class="p3-text-line player" id="p3-t2">▶ PLAY LIST</div>
-                    <div class="p3-text-line plog" id="p3-t3">° plog .!</div>
+                    <div class="p3-sub-lead" id="p3-head">DAILY ESSAY</div>
+                    <div class="p3-text-line italic" id="p3-t1">silent whispers</div>
+                    <div class="p3-text-line player" id="p3-t2">▶ 白日梦游记</div>
+                    <div class="p3-text-line plog" id="p3-t3">“平淡即真实”</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- 下方 6 个 APP 图标 -->
-            <div class="app-grid-six">
+            <!-- 第一页 8 个 APP 图标 (4列 x 2行) -->
+            <div class="app-grid-eight">
               <div class="app-icon-item" data-app="chat">
                 <div class="app-squircle"><span class="app-glyph">C</span></div>
                 <span class="app-label">chat</span>
@@ -143,36 +135,128 @@
                 <div class="app-squircle"><span class="app-glyph">L</span></div>
                 <span class="app-label">老福特</span>
               </div>
+              <div class="app-icon-item" data-app="xianyu">
+                <div class="app-squircle"><span class="app-glyph">X</span></div>
+                <span class="app-label">闲鱼</span>
+              </div>
+              <div class="app-icon-item" data-app="meituan">
+                <div class="app-squircle"><span class="app-glyph">T</span></div>
+                <span class="app-label">美团</span>
+              </div>
             </div>
 
           </div>
         </section>
 
-        <!-- 第二页 (留空预留) -->
+        <!-- ================= 第 2 页 ================= -->
         <section class="page-screen" id="page-2">
-          <div class="empty-page-placeholder">
-            <span>PAGE II</span>
-          </div>
-        </section>
+          <div class="page-content">
+            
+            <!-- 第二页顶部小组件 (Story Mode 故事卡片) -->
+            <div class="widget-story widget-box" id="widgetStory">
+              <!-- 顶部标题栏 -->
+              <div class="story-nav-bar">
+                <div class="story-back-tag">
+                  <span class="arrow-glyph">‹</span>
+                  <span class="mode-txt">STORY</span>
+                </div>
+                <div class="story-center-title">
+                  <span class="story-brand">Story Mode</span>
+                </div>
+                <div class="story-right-action">
+                  <span class="story-dot">···</span>
+                </div>
+              </div>
 
-        <!-- 第三页 (留空预留) -->
-        <section class="page-screen" id="page-3">
-          <div class="empty-page-placeholder">
-            <span>PAGE III</span>
+              <!-- 作者与状态行 -->
+              <div class="story-user-header">
+                <div class="story-user-info">
+                  <div class="story-user-avatar">
+                    <img id="story-avatar-img" src="" alt="" />
+                  </div>
+                  <div class="story-meta-col">
+                    <span class="story-author-name" id="story-author">测试员</span>
+                    <span class="story-author-bio" id="story-subtext">If onli I were in your eye...</span>
+                  </div>
+                </div>
+                <div class="story-badge-right">
+                  <span class="heart-symbol">♥</span>
+                  <span class="heart-symbol">♥</span>
+                  <span class="sharp-symbol">#1</span>
+                </div>
+              </div>
+
+              <!-- 4图画廊排版 -->
+              <div class="story-gallery-row">
+                <div class="gallery-thumb"><img id="story-g1" src="" alt="" /></div>
+                <div class="gallery-thumb"><img id="story-g2" src="" alt="" /></div>
+                <div class="gallery-thumb"><img id="story-g3" src="" alt="" /></div>
+                <div class="gallery-thumb gallery-add" id="story-g4-wrap">
+                  <span class="add-plus">+</span>
+                </div>
+              </div>
+
+              <!-- 语录黑白双拼卡片 -->
+              <div class="story-quote-card">
+                <div class="quote-white-part">
+                  <div class="quote-main-text" id="story-quote">
+                    “跟我一起看星星吧，一起聊哪里是北极星，哪里是你的星座，哪里是你的曾经。”
+                  </div>
+                  <div class="quote-footnote" id="story-footnote">【片刻须臾就好】</div>
+                </div>
+                <div class="quote-black-part">
+                  <div class="quote-date-time" id="story-timestamp">2026年06月13日 08:58</div>
+                  <div class="quote-stars-row">★★★★★</div>
+                  <div class="quote-icons-row">
+                    <span>···</span>
+                    <span class="trash-glyph">⌸</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 底部操作条 (Re-roll 刷新文字) -->
+              <div class="story-bottom-action" id="storyRerollBtn">
+                <div class="reroll-pill">
+                  <span class="plus-icon">+</span>
+                  <span class="reroll-text">Latest Re-roll</span>
+                  <span class="arrow-right">›</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 第二页 4 个 APP 图标 -->
+            <div class="app-grid-four">
+              <div class="app-icon-item" data-app="video">
+                <div class="app-squircle"><span class="app-glyph">V</span></div>
+                <span class="app-label">视频</span>
+              </div>
+              <div class="app-icon-item" data-app="lovers">
+                <div class="app-squircle"><span class="app-glyph">H</span></div>
+                <span class="app-label">恋人之家</span>
+              </div>
+              <div class="app-icon-item" data-app="secret">
+                <div class="app-squircle"><span class="app-glyph">Y</span></div>
+                <span class="app-label">你懂得</span>
+              </div>
+              <div class="app-icon-item" data-app="checker">
+                <div class="app-squircle"><span class="app-glyph">F</span></div>
+                <span class="app-label">查手机</span>
+              </div>
+            </div>
+
           </div>
         </section>
 
       </div>
     </main>
 
-    <!-- 底部滑页指示器 -->
+    <!-- 底部滑页圆点指示器 (2页) -->
     <div class="page-indicator-bar">
       <span class="dot active"></span>
       <span class="dot"></span>
-      <span class="dot"></span>
     </div>
 
-    <!-- 底部 Dock 栏 (4个核心应用) -->
+    <!-- 底部 Dock 栏 (吸底自适应安全区) -->
     <footer class="dock-bar">
       <div class="dock-glass">
         <div class="app-icon-item" data-app="settings">
@@ -196,18 +280,16 @@
 
   </div>
 
-  <!-- 小组件编辑遮罩层 (支持超清原图选择与文字保存) -->
+  <!-- 小组件可视化编辑抽屉 -->
   <div class="editor-overlay" id="editorOverlay">
     <div class="editor-sheet">
       <div class="editor-head">
-        <span class="editor-title" id="editorModalTitle">编辑小组件</span>
+        <span class="editor-title" id="editorModalTitle">编辑组件</span>
         <button type="button" class="editor-close" id="closeEditorBtn">&times;</button>
       </div>
-      <div class="editor-body" id="editorDynamicFields">
-        <!-- 动态渲染输入框与文件选择器 -->
-      </div>
+      <div class="editor-body" id="editorDynamicFields"></div>
       <div class="editor-foot">
-        <button type="button" class="btn-primary" id="saveWidgetBtn">保存并刷新</button>
+        <button type="button" class="btn-primary" id="saveWidgetBtn">完成并无损保存</button>
       </div>
     </div>
   </div>

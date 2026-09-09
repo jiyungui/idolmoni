@@ -1,70 +1,77 @@
-/* ================= 主屏 6 个 APP 网格 ================= */
-.app-grid-six {
+/* ================= 第 1 页：8 个应用 (4 x 2) ================= */
+.app-grid-eight {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 14px 10px;
-  padding: 4px 6px;
-  margin-top: auto;
+  row-gap: 10px;
+  column-gap: 8px;
+  padding: 4px 2px;
+}
+
+/* ================= 第 2 页：4 个应用 (1 x 4) ================= */
+.app-grid-four {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 4px 2px;
 }
 
 .app-icon-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
 }
 .app-squircle {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  width: 54px;
+  height: 54px;
+  border-radius: 13px;
   background: #FFFFFF;
   border: 1px solid var(--border-soft);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: transform 0.15s ease, background 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: transform 0.12s ease;
 }
 .app-icon-item:active .app-squircle {
   transform: scale(0.92);
-  background: #EEEEEE;
+  background: #ECECEC;
 }
 .app-glyph {
   font-family: var(--font-serif);
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 500;
-  color: #2A2A2A;
+  color: #222222;
 }
 .app-label {
   font-size: 11px;
   color: #333333;
-  font-weight: 400;
   letter-spacing: -0.2px;
   white-space: nowrap;
 }
 
-/* ================= 底部 Dock 栏 ================= */
+/* ================= 吸底 Dock 栏：彻底消除白块与悬空 ================= */
 .dock-bar {
-  padding: 8px 16px 14px 16px;
+  width: 100%;
+  padding: 4px 12px 6px 12px;
 }
 .dock-glass {
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-soft);
-  border-radius: 26px;
-  padding: 10px 14px;
+  border-radius: 24px;
+  padding: 7px 10px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 .dock-glass .app-squircle {
-  width: 50px;
-  height: 50px;
-  border-radius: 13px;
-  background: #F8F8F8;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #F7F7F7;
 }
 .dock-glass .app-label {
   font-size: 10px;

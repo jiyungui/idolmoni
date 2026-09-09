@@ -1,11 +1,6 @@
-/**
- * 屏幕驱动、时钟走时、三页丝滑触摸手势联动
- */
-
 let currentPage = 0;
-const TOTAL_PAGES = 3;
+const TOTAL_PAGES = 2; // 精确 2 页
 
-// 更新状态栏实时时间
 function updateClock() {
   const now = new Date();
   const hrs = String(now.getHours()).padStart(2, '0');
@@ -14,21 +9,18 @@ function updateClock() {
   if (clockEl) clockEl.textContent = `${hrs}:${mins}`;
 }
 
-// 切换页面
 function goToPage(index) {
   if (index < 0 || index >= TOTAL_PAGES) return;
   currentPage = index;
   const track = document.getElementById('pagesTrack');
   track.style.transform = `translateX(-${(currentPage * 100) / TOTAL_PAGES}%)`;
   
-  // 更新底部圆点
   const dots = document.querySelectorAll('.page-indicator-bar .dot');
   dots.forEach((dot, idx) => {
     dot.classList.toggle('active', idx === currentPage);
   });
 }
 
-// 触摸手势横滑
 function initTouchNavigation() {
   const viewport = document.getElementById('viewport');
   let startX = 0;
@@ -48,12 +40,9 @@ function initTouchNavigation() {
   viewport.addEventListener('touchend', () => {
     if (!isSwiping) return;
     const diff = currentX - startX;
-    if (Math.abs(diff) > 50 && currentX !== 0) {
-      if (diff < 0) {
-        goToPage(currentPage + 1);
-      } else {
-        goToPage(currentPage - 1);
-      }
+    if (Math.abs(diff) > 40 && currentX !== 0) {
+      if (diff < 0) goToPage(currentPage + 1);
+      else goToPage(currentPage - 1);
     }
     startX = 0;
     currentX = 0;
@@ -61,23 +50,10 @@ function initTouchNavigation() {
   });
 }
 
-// 应用点击交互（先留空预留，带高质感反馈）
-function initAppClicks() {
-  document.querySelectorAll('.app-icon-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const appName = item.getAttribute('data-app');
-      console.log(`Open App: ${appName}`);
-    });
-  });
-}
-
-// 页面启动
 document.addEventListener('DOMContentLoaded', async () => {
   updateClock();
   setInterval(updateClock, 1000);
-  
   await loadWidgets();
   initWidgetEvents();
   initTouchNavigation();
-  initAppClicks();
 });
