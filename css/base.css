@@ -1,0 +1,153 @@
+/* ================= 全局重置与白灰基底 ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+:root {
+  --bg-main: #F1F2F1;
+  --panel-bg: #FFFFFF;
+  --border-soft: #D7D7D7;
+  --text-main: #2A2A2A;
+  --text-muted: #8E8E93;
+  --font-serif: "Didot", "Bodoni MT", "Cinzel", "Songti SC", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-main);
+  font-family: var(--font-sans);
+  color: var(--text-main);
+}
+
+/* 视口全屏容器：规避移动端视口跳动 */
+#phone-container {
+  width: 100%;
+  height: 100%;
+  max-width: 480px; /* 桌面端居中模拟，移动端自然撑满 */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: var(--bg-main);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* 顶部状态栏 */
+.status-bar {
+  height: 38px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+.status-indicators {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #555555;
+}
+.battery-pill {
+  width: 22px;
+  height: 11px;
+  border: 1.2px solid #555555;
+  border-radius: 3px;
+  padding: 1px;
+  position: relative;
+}
+.battery-pill::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 2px;
+  width: 2px;
+  height: 5px;
+  background-color: #555555;
+  border-radius: 0 1px 1px 0;
+}
+.battery-level {
+  width: 75%;
+  height: 100%;
+  background-color: #444444;
+  border-radius: 1px;
+}
+
+/* 三页滑块结构 */
+.screen-viewport {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.pages-track {
+  display: flex;
+  width: 300%;
+  height: 100%;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.page-screen {
+  width: 33.33333%;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 16px 12px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.page-screen::-webkit-scrollbar {
+  display: none;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.empty-page-placeholder {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-serif);
+  letter-spacing: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* 指示器 */
+.page-indicator-bar {
+  height: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.page-indicator-bar .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--border-soft);
+  transition: all 0.25s ease;
+}
+.page-indicator-bar .dot.active {
+  width: 16px;
+  border-radius: 4px;
+  background-color: #666666;
+}
